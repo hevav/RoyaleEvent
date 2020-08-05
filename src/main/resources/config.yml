@@ -1,0 +1,55 @@
+#Middle cords, set with /royalemiddle
+midXcord: 0
+midYcord: 0
+midZcord: 0
+#Chests cords, add with /royaleaddchest, remove with /royaleremovechest
+chests:
+  - X: 0
+    Y: 0
+    Z: 0
+#Game periods (worldborder and loot)
+#loot = chest but with inverted chance
+periods:
+  worldborder:
+    - type: radius
+      radius: 300
+      time: 150
+    - type: wait
+      time: 100
+    - type: radius
+      radius: 250
+      time: 150
+    - type: wait
+      time: 100
+    - type: radius
+      radius: 150
+      time: 150
+    - type: wait
+      time: 100
+    - type: radius
+      radius: 75
+      time: 120
+    - type: wait
+      time: 80
+    - type: radius
+      radius: 45
+      time: 100
+  loot:
+    - type: airdrop
+      time: 150
+    - type: wait
+      time: 120
+    - type: airdrop
+      time: 150
+    - type: wait
+      time: 120
+    - type: airdrop
+      time: 150
+    - type: wait
+      time: 120
+    - type: airdrop
+      time: 100
+    - type: wait
+      time: 150
+    - type: airdrop
+      time: 100
