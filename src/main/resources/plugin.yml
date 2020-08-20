@@ -1,19 +1,10 @@
 name: RoyaleEvent
 version: 0.0.1
 main: dev.hevav.royaleevent.RoyaleEvent
-api-version: 1.13
 commands:
   royalemiddle:
     description: Set royale's middle point
     usage: /royalemiddle
-    permission: royaleevent.admin
-  royaleaddchest:
-    description: Add royale's chest point
-    usage: /royaleaddchest
-    permission: royaleevent.admin
-  royaleremovechest:
-    description: Remove royale's chest point
-    usage: /royaleremovechest
     permission: royaleevent.admin
   royalestart:
     description: Start an event

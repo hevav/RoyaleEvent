@@ -2,14 +2,11 @@
 midXcord: 0
 midYcord: 0
 midZcord: 0
-#Chests cords, add with /royaleaddchest, remove with /royaleremovechest
-chests:
-  - X: 0
-    Y: 0
-    Z: 0
 #Game periods (worldborder and loot)
 #loot = chest but with inverted chance
 periods:
+  deletetrain:
+    time: 60
   worldborder:
     - type: radius
       radius: 300

@@ -11,16 +11,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RoyaleEvent extends JavaPlugin {
     public static FileConfiguration config;
+    private static RoyaleEvent instance;
+
+    public static RoyaleEvent getInstance(){
+        return instance;
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
+
         this.saveDefaultConfig();
         config = this.getConfig();
 
         this.getCommand("royalestart").setExecutor(new RoyaleStart());
         this.getCommand("royalemiddle").setExecutor(new RoyaleMiddle());
         this.getCommand("royalestop").setExecutor(new RoyaleStop());
-        this.getCommand("royaleaddchest").setExecutor(new RoyaleAddChest());
-        this.getCommand("royaleremovechest").setExecutor(new RoyaleRemoveChest());
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new BlockListener(), this);
