@@ -1,6 +1,9 @@
 package dev.hevav.royaleevent.listeners;
 
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
+import dev.hevav.royaleevent.types.Inventorable;
+import dev.hevav.royaleevent.types.OtherItems;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,33 +21,14 @@ public class BlockListener implements org.bukkit.event.Listener {
         if(RoyaleHelper.isStarted()){
             PlayerInventory inventory = event.getPlayer().getInventory();
             ItemStack item = inventory.getItemInMainHand();
-            int number;
-            switch (item.getType()){
-                default:
-                    event.setCancelled(true);
-                    return;
-                case WOOD:
-                case WOOD_STEP:
-                case WOOD_STAIRS:
-                    number = 6;
-                    break;
-                case BRICK:
-                case BRICK_STAIRS:
-                    number = 7;
-                    break;
-                case IRON_BLOCK:
-                case IRON_FENCE:
-                case STONE_SLAB2:
-                    number = 8;
-                    break;
-            }
+            Inventorable block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
-            if(amount < 2){
+            if(block == null || amount < 2){
                 event.setCancelled(true);
                 return;
             }
             item.setAmount(amount-1);
-            inventory.setItem(number, item);
+            inventory.setItem(block.inventoryNumber, item);
         }
     }
 
@@ -57,59 +41,18 @@ public class BlockListener implements org.bukkit.event.Listener {
             ItemMeta meta = item.getItemMeta();
             if (meta == null)
                 return;
+            if(event.getPlayer().getGameMode() == GameMode.SPECTATOR)
+                return;
             Inventory inventory = event.getPlayer().getInventory();
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
-                int number;
-                String text;
-                Material material;
-                switch (item.getType()) {
-                    case WOOD:
-                        number = 6;
-                        text = "Поставить деревянную лестницу(ЛКМ для смены)";
-                        material = Material.WOOD_STAIRS;
-                        break;
-                    case WOOD_STAIRS:
-                        number = 6;
-                        text = "Поставить деревянный полублок(ЛКМ для смены)";
-                        material = Material.WOOD_STEP;
-                        break;
-                    case WOOD_STEP:
-                        number = 6;
-                        text = "Поставить доски(ЛКМ для смены)";
-                        material = Material.WOOD;
-                        break;
-                    case BRICK:
-                        number = 7;
-                        text = "Поставить кирпичную лестницу(ЛКМ для смены)";
-                        material = Material.BRICK_STAIRS;
-                        break;
-                    case BRICK_STAIRS:
-                        number = 7;
-                        text = "Поставить кирпич(ЛКМ для смены)";
-                        material = Material.BRICK;
-                        break;
-                    case IRON_BLOCK:
-                        number = 8;
-                        text = "Поставить железный полублок(ЛКМ для смены)";
-                        material = Material.STONE_SLAB2;
-                    case STONE_SLAB2:
-                        number = 8;
-                        text = "Поставить железный забор(ЛКМ для смены)";
-                        material = Material.IRON_FENCE;
-                        break;
-                    case IRON_FENCE:
-                        number = 8;
-                        text = "Поставить железный блок(ЛКМ для смены)";
-                        material = Material.IRON_BLOCK;
-                        break;
-                    default:
-                        return;
-                }
-                ItemStack block = new ItemStack(material, inventory.getItem(number).getAmount());
+                Inventorable toPlace = OtherItems.switchItem(item.getType());
+                if(toPlace == null)
+                    return;
+                ItemStack block = new ItemStack(toPlace.material, inventory.getItem(toPlace.inventoryNumber).getAmount());
                 ItemMeta blockMeta = block.getItemMeta();
-                blockMeta.setDisplayName(text);
+                blockMeta.setDisplayName(toPlace.name);
                 block.setItemMeta(blockMeta);
-                inventory.setItem(number, block);
+                inventory.setItem(toPlace.inventoryNumber, block);
             }
         }
     }

@@ -1,6 +1,8 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
+import dev.hevav.royaleevent.types.Inventorable;
+import dev.hevav.royaleevent.types.OtherItems;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -9,12 +11,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class RoyaleHelper {
 
     private static boolean started = false;
-    private static HashMap<String, Integer> killerStats;
+    private static HashMap<String, Integer> killerStats = new HashMap<>();
 
     public static void initRoyale(Server server, World initWorld){
         server.broadcastMessage(ChatColor.GOLD + "[RE] Ивент запущен");
@@ -31,30 +36,34 @@ public class RoyaleHelper {
             pickaxeMeta.setDisplayName("Ломалка");
             pickaxe.setItemMeta(pickaxeMeta);
 
-            ItemStack wood = new ItemStack(Material.WOOD);
-            ItemMeta woodMeta = wood.getItemMeta();
-            woodMeta.setDisplayName("Поставить доски(ЛКМ для смены)");
-            wood.setItemMeta(woodMeta);
+            Inventorable wood = OtherItems.Wood;
+            ItemStack woodItem = new ItemStack(wood.material);
+            ItemMeta woodMeta = woodItem.getItemMeta();
+            woodMeta.setDisplayName(wood.name);
+            woodItem.setItemMeta(woodMeta);
 
-            ItemStack brick = new ItemStack(Material.BRICK);
-            ItemMeta brickMeta = brick.getItemMeta();
-            brickMeta.setDisplayName("Поставить кирпич(ЛКМ для смены)");
-            brick.setItemMeta(brickMeta);
+            Inventorable brick = OtherItems.Bricks;
+            ItemStack brickItem = new ItemStack(brick.material);
+            ItemMeta brickMeta = brickItem.getItemMeta();
+            brickMeta.setDisplayName(brick.name);
+            brickItem.setItemMeta(brickMeta);
 
-            ItemStack iron = new ItemStack(Material.IRON_BLOCK);
-            ItemMeta ironMeta = iron.getItemMeta();
-            ironMeta.setDisplayName("Поставить железный блок(ЛКМ для смены)");
-            iron.setItemMeta(ironMeta);
+            Inventorable iron = OtherItems.Iron;
+            ItemStack ironItem = new ItemStack(iron.material);
+            ItemMeta ironMeta = ironItem.getItemMeta();
+            ironMeta.setDisplayName(iron.name);
+            ironItem.setItemMeta(ironMeta);
 
-            ItemStack patron = new ItemStack(Material.TRIPWIRE_HOOK);
-            ItemMeta patronMeta = patron.getItemMeta();
-            patronMeta.setDisplayName("Патроны(для перезарядки ПКМ с оружием)");
+            Inventorable patron = OtherItems.Patron;
+            ItemStack patronItem = new ItemStack(patron.material);
+            ItemMeta patronMeta = patronItem.getItemMeta();
+            patronMeta.setDisplayName(patron.name);
 
             inventory.setItem(0, pickaxe);
-            inventory.setItem(6, wood);
-            inventory.setItem(7, brick);
-            inventory.setItem(8, iron);
-            inventory.setItemInOffHand(patron);
+            inventory.setItem(6, woodItem);
+            inventory.setItem(7, brickItem);
+            inventory.setItem(8, ironItem);
+            inventory.setItemInOffHand(patronItem);
 
             inventory.setChestplate(new ItemStack(Material.ELYTRA));
 
@@ -62,6 +71,9 @@ public class RoyaleHelper {
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+
+            player.setResourcePack("https://ws1.hevav.dev/cloud/fortnite.zip");
+            player.sendTitle(ChatColor.GOLD+"Игра начата!", "RoyaleEvent by hevav", 5, 80, 5);
         }
         started = true;
         PeriodsHelper.doPeriod(server, initWorld, middleLocation);
@@ -88,5 +100,29 @@ public class RoyaleHelper {
             killerStats.remove(nick);
         }
         killerStats.put(nick, ++currentKills);
+    }
+
+    public static void proceedWinner(Player winner){
+        winner.sendTitle(ChatColor.GOLD+"Вы победитель!!!", "RoyaleEvent by hevav", 5, 80, 5);
+        Server server = Bukkit.getServer();
+        RoyaleHelper.stopRoyale(server);
+        server.broadcastMessage(ChatColor.GOLD+"[RE] И у нас есть победитель! Это... " + winner.getName() + "!!!!");
+        server.broadcastMessage(ChatColor.GOLD+"[RE] Подсчитываю топ по киллам....");
+        HashMap<String, Integer> killerStats = RoyaleHelper.getKillerStats();
+        List<Integer> killsTop = new ArrayList<>(killerStats.values());
+        Collections.sort(killsTop);
+        Collections.reverse(killsTop);
+
+        for(int i = 0; i < Math.min(3, killsTop.size()); i++){
+            StringBuilder nicks = new StringBuilder();
+            int needNum = killsTop.get(i);
+            killerStats.forEach((String nick, Integer num)->{
+                if(num == needNum){
+                    nicks.append(nick).append(" ");
+                }
+            });
+
+            server.broadcastMessage(String.format("%s[RE] %d Место %sс %d убийствами", ChatColor.GOLD, i+1, nicks, needNum));
+        }
     }
 }

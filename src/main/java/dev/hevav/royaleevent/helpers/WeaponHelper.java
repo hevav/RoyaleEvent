@@ -1,6 +1,9 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
+import dev.hevav.royaleevent.types.Inventorable;
+import dev.hevav.royaleevent.types.OtherItems;
+import dev.hevav.royaleevent.types.Weapon;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,79 +15,53 @@ public class WeaponHelper {
     public static void doRandomWeaponDrop(Location location, int threads){
         Random random = new Random();
         for(int i = 0; i<threads; i++) {
-            Material material;
+            Inventorable inventorable;
             switch(random.nextInt(12)){
                 case 0:
                 case 1:
-                    material = Material.WOOD_HOE;
+                    inventorable = Weapon.Tactical;
                     break;
                 case 2:
                 case 3:
-                    material = Material.STONE_HOE;
+                    inventorable = Weapon.Pistol;
                     break;
                 case 4:
                 case 5:
-                    material = Material.IRON_HOE;
+                    inventorable = Weapon.SCAR;
                     break;
                 case 6:
-                    material = Material.GOLD_HOE;
+                    inventorable = Weapon.Sniper;
                     break;
                 case 7:
-                    material = Material.DIAMOND_HOE;
+                    inventorable = Weapon.UZI;
                     break;
                 case 8:
                 case 9:
                 case 10:
                 case 11:
-                    material = Material.TRIPWIRE_HOOK;
+                    inventorable = OtherItems.Patron;
                     break;
                 default:
-                    material = Material.BRICK;
+                    inventorable = OtherItems.Bricks;
             }
-            location.getWorld().dropItem(location, new ItemStack(material, 1));
+            location.getWorld().dropItem(location, new ItemStack(inventorable.material, 1));
         }
     }
 
     public static void doReload(int inventoryNumber, PlayerInventory inventory){
         ItemStack reloadWeapon = inventory.getItem(inventoryNumber);
         ItemStack patrons = inventory.getItemInOffHand();
-        int reloadSize;
-        int reloadTicks;
-        switch (reloadWeapon.getType()){
-            case WOOD_HOE:
-                reloadSize = 6;
-                reloadTicks = 120;
-                break;
-            case STONE_HOE:
-                reloadSize = 20;
-                reloadTicks = 30;
-                break;
-            case IRON_HOE:
-                reloadSize = 40;
-                reloadTicks = 40;
-                break;
-            case GOLD_HOE:
-                reloadSize = 1;
-                reloadTicks = 80;
-                break;
-            case DIAMOND_HOE:
-                reloadSize = 25;
-                reloadTicks = 45;
-                break;
-            default:
-                return;
-        }
-
-        if(patrons.getAmount() < 2)
+        Weapon weapon = Weapon.getWeaponByMaterial(reloadWeapon.getType());
+        if(patrons.getAmount() < 2 || weapon == null)
             return;
-        int leftToFull = reloadSize-reloadWeapon.getAmount();
-        reloadWeapon.setAmount(Math.min(leftToFull, patrons.getAmount()-1));
-        patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount()-1));
+        int leftToFull = weapon.reloadSize - reloadWeapon.getAmount();
+        reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
+        patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount() - 1));
         inventory.setItemInOffHand(patrons);
 
         RoyaleEvent plugin = RoyaleEvent.getInstance();
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, ()->{
             inventory.setItem(inventoryNumber, reloadWeapon);
-        }, reloadTicks);
+        }, weapon.reloadTicks);
     }
 }

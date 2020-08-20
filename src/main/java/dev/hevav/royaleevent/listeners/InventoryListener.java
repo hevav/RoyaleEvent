@@ -2,6 +2,8 @@ package dev.hevav.royaleevent.listeners;
 
 import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
+import dev.hevav.royaleevent.types.Inventorable;
+import dev.hevav.royaleevent.types.OtherItems;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,39 +43,27 @@ public class InventoryListener implements org.bukkit.event.Listener{
             PlayerInventory inventory = ((Player) event.getEntity()).getInventory();
             event.getItem().remove();
 
-            int number;
-            switch (pickupItem.getType()){
-                case WOOD:
-                case WOOD_STEP:
-                case WOOD_DOUBLE_STEP:
-                case WOOD_STAIRS:
-                    number = 6;
-                    break;
-                case BRICK:
-                case BRICK_STAIRS:
-                    number = 7;
-                    break;
-                case IRON_BLOCK:
-                case STONE_SLAB2:
-                case IRON_FENCE:
-                    number = 8;
-                    break;
-                case TRIPWIRE_HOOK:
-                    ItemStack itemStack = inventory.getItemInOffHand();
-                    itemStack.setAmount(itemStack.getAmount()+16);
-                    inventory.setItemInOffHand(itemStack);
-                    return;
-                default:
-                    return;
+            if (pickupItem.getType() == Material.TRIPWIRE_HOOK){
+                ItemStack itemStack = inventory.getItemInOffHand();
+                itemStack.setAmount(itemStack.getAmount()+16);
+                inventory.setItemInOffHand(itemStack);
+                event.setCancelled(true);
+                return;
             }
-            ItemStack curItem = inventory.getItem(number);
+
+            Inventorable item = OtherItems.getItemByMaterial(pickupItem.getType());
+            if(item == null) {
+                event.setCancelled(true);
+                return;
+            }
+            ItemStack curItem = inventory.getItem(item.inventoryNumber);
             int setAmount = curItem.getAmount()+1;
             if(pickupItem.getType() == Material.WOOD_DOUBLE_STEP)
                 ++setAmount;
             if(setAmount == 100)
                 return;
             curItem.setAmount(setAmount);
-            inventory.setItem(number, curItem);
+            inventory.setItem(item.inventoryNumber, curItem);
         }
     }
 
