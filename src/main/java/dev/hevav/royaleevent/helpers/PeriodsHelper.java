@@ -51,7 +51,7 @@ public class PeriodsHelper {
                     }, tickForDrop - (time*20));
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         Location location = BlockHelper.getRandomDropPoint(world);
-                        location.getBlock().setType(Material.DIAMOND_BLOCK);
+                        location.getBlock().setType(Material.ENDER_CHEST);
                         server.broadcastMessage(String.format("%s[RE] Появился эйрдроп на %d %d %d", ChatColor.GOLD, location.getBlockX(), location.getBlockY(), location.getBlockZ()));
                     }, tickForDrop);
                    break;

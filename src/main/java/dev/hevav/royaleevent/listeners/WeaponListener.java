@@ -5,10 +5,7 @@ import dev.hevav.royaleevent.helpers.BlockHelper;
 import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.helpers.WeaponHelper;
-import dev.hevav.royaleevent.types.Drinkable;
-import dev.hevav.royaleevent.types.Inventorable;
-import dev.hevav.royaleevent.types.OtherItems;
-import dev.hevav.royaleevent.types.Weapon;
+import dev.hevav.royaleevent.types.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -60,8 +57,8 @@ public class WeaponListener implements org.bukkit.event.Listener {
                     snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
                     snowball.setMetadata("killer", new FixedMetadataValue(RoyaleEvent.getInstance(), event.getPlayer().getName()));
                     Location toTeleport = event.getPlayer().getLocation();
-                    toTeleport.setYaw(toTeleport.getYaw() + weapon.playerYaw);
-                    toTeleport.setPitch(toTeleport.getPitch() + weapon.playerPitch);
+                    toTeleport.setYaw(toTeleport.getYaw() + weapon.playerYaw*3);
+                    toTeleport.setPitch(toTeleport.getPitch() + weapon.playerPitch*3);
                     event.getPlayer().teleport(toTeleport);
                     break;
                 case RIGHT_CLICK_BLOCK:
@@ -156,7 +153,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                             inventory.setItem(6, curItem);
                         }
                         return;
-                    case DIAMOND_BLOCK:
+                    case ENDER_CHEST:
                         event.getPlayer().getServer().broadcastMessage(ChatColor.GOLD + "[RE] Кто-то нашел эйрдроп");
                         WeaponHelper.doRandomWeaponDrop(clickedBlock.getLocation(), 5);
                         clickedBlock.setType(Material.AIR);
@@ -166,11 +163,9 @@ public class WeaponListener implements org.bukkit.event.Listener {
                 if(itemInventorable == null)
                     return;
                 ItemStack curItem = inventory.getItem(itemInventorable.inventoryNumber);
-                if(curItem.getAmount() > 100)
+                if(curItem.getAmount() > 99)
                     return;
-                int setAmount = curItem.getAmount()+1;
-                if(clickedBlock.getType() == Material.WOOD_DOUBLE_STEP)
-                    ++setAmount;
+                int setAmount = curItem.getAmount()+BlockHelper.deleteChunk(clickedBlock.getLocation(), clickedBlock.getType());
                 curItem.setAmount(setAmount);
                 inventory.setItem(itemInventorable.inventoryNumber, curItem);
                 clickedBlock.setType(Material.AIR);

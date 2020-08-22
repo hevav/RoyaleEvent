@@ -54,15 +54,21 @@ public class BlockHelper {
         return new Location(fromLocation.getWorld(), xId*5, yId*5, zId*5);
     }
 
-    public static void deleteChunk(Location fromLocation){
+    public static int deleteChunk(Location fromLocation, Material material){
         Location removeLocation = getChunkableStart(fromLocation);
+        int count = 0;
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
                 for(int k = 0; k < 5; k++){
-                    removeLocation.add(k, j, i).getBlock().setType(Material.AIR);
+                    Block block = removeLocation.add(k, j, i).getBlock();
+                    if(block.getType() == material) {
+                        block.setType(Material.AIR);
+                        ++count;
+                    }
                 }
             }
         }
+        return count/25;
     }
 
     public static boolean verifyChunk(Chunkable chunkable){
@@ -75,5 +81,24 @@ public class BlockHelper {
             }
         }
         return true;
+    }
+
+    public static Location nextChunkByPlayer(Location playerLocation, Location chunkLocation){
+        float playerYaw = playerLocation.getYaw();
+        int x = 0;
+        int z = 0;
+        if (playerYaw >= 315 && playerYaw < 45){
+            z = -5;
+        }
+        else if (playerYaw >= 45 && playerYaw < 135){
+            x = 5;
+        }
+        else if (playerYaw >= 155 && playerYaw < 225){
+            z = 5;
+        }
+        else{
+            x = -5;
+        }
+        return chunkLocation.add(x, 1, z);
     }
 }

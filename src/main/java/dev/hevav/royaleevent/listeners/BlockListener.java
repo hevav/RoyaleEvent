@@ -1,6 +1,8 @@
 package dev.hevav.royaleevent.listeners;
 
+import dev.hevav.royaleevent.helpers.BlockHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
+import dev.hevav.royaleevent.types.Chunkable;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import org.bukkit.GameMode;
@@ -19,14 +21,15 @@ public class BlockListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(BlockPlaceEvent event){
         if(RoyaleHelper.isStarted()){
+            event.setCancelled(true);
             PlayerInventory inventory = event.getPlayer().getInventory();
             ItemStack item = inventory.getItemInMainHand();
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
-            if(block == null || amount < 2){
-                event.setCancelled(true);
+            if(block == null || amount < 2)
                 return;
-            }
+
+            Chunkable.fromLocation(BlockHelper.nextChunkByPlayer(event.getPlayer().getLocation(), event.getBlock().getLocation())).replaceWith(block.chunkable);
             item.setAmount(amount-1);
             inventory.setItem(block.inventoryNumber, item);
         }
