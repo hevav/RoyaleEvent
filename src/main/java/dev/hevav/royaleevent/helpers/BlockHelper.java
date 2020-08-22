@@ -1,5 +1,6 @@
 package dev.hevav.royaleevent.helpers;
 
+import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.types.Chunkable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -39,7 +40,7 @@ public class BlockHelper {
         location.setY(world.getHighestBlockYAt(location));
         Block under = world.getBlockAt(location);
 
-        if(under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA) {
+        if(under.getType().equals(Material.LAVA) || under.getType().equals(Material.STATIONARY_LAVA)) {
             under.setType(Material.IRON_BLOCK);
             location.add(0, 1, 0);
         }
@@ -48,57 +49,29 @@ public class BlockHelper {
     }
 
     public static Location getChunkableStart(Location fromLocation){
-        int xId = fromLocation.getBlockX()/5;
-        int yId = fromLocation.getBlockY()/5;
-        int zId = fromLocation.getBlockZ()/5;
+        int xId = (fromLocation.getBlockX()+1)/5;
+        int yId = (fromLocation.getBlockY()+1)/5;
+        int zId = (fromLocation.getBlockZ()+1)/5;
         return new Location(fromLocation.getWorld(), xId*5, yId*5, zId*5);
     }
 
     public static int deleteChunk(Location fromLocation, Material material){
         Location removeLocation = getChunkableStart(fromLocation);
-        int count = 0;
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 5; j++){
-                for(int k = 0; k < 5; k++){
-                    Block block = removeLocation.add(k, j, i).getBlock();
-                    if(block.getType() == material) {
-                        block.setType(Material.AIR);
+        World world = removeLocation.getWorld();
+        int count = 4;
+        for (int i = removeLocation.getBlockX()-5; i < removeLocation.getBlockX()+1; i++){
+            for (int j = removeLocation.getBlockY()-1; j < removeLocation.getBlockY()+5; j++){
+                for(int k = removeLocation.getBlockZ()-1; k < removeLocation.getBlockZ()+5; k++){
+                    Block block = world.getBlockAt(i, j, k);
+                    if(block.getType().equals(material)) {
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+                            block.setType(Material.AIR);
+                        });
                         ++count;
                     }
                 }
             }
         }
-        return count/25;
-    }
-
-    public static boolean verifyChunk(Chunkable chunkable){
-        for (int i = 1; i < 4; i++){
-            for (int j = 1; j < 4; j++){
-                for(int k = 1; k < 4; k++){
-                    if(chunkable.chunk.get(i).get(j).get(k) != Material.AIR)
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public static Location nextChunkByPlayer(Location playerLocation, Location chunkLocation){
-        float playerYaw = playerLocation.getYaw();
-        int x = 0;
-        int z = 0;
-        if (playerYaw >= 315 && playerYaw < 45){
-            z = -5;
-        }
-        else if (playerYaw >= 45 && playerYaw < 135){
-            x = 5;
-        }
-        else if (playerYaw >= 155 && playerYaw < 225){
-            z = 5;
-        }
-        else{
-            x = -5;
-        }
-        return chunkLocation.add(x, 1, z);
+        return count/5;
     }
 }

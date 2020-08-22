@@ -3,7 +3,9 @@ package dev.hevav.royaleevent.helpers;
 import dev.hevav.royaleevent.RoyaleEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
@@ -51,7 +53,7 @@ public class PeriodsHelper {
                     }, tickForDrop - (time*20));
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         Location location = BlockHelper.getRandomDropPoint(world);
-                        location.getBlock().setType(Material.ENDER_CHEST);
+                        location.getBlock().setType(Material.DIAMOND_BLOCK);
                         server.broadcastMessage(String.format("%s[RE] Появился эйрдроп на %d %d %d", ChatColor.GOLD, location.getBlockX(), location.getBlockY(), location.getBlockZ()));
                     }, tickForDrop);
                    break;
@@ -62,6 +64,13 @@ public class PeriodsHelper {
                     break;
             }
         }
+
+        scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+            for (Player player : server.getOnlinePlayers()){
+                PlayerInventory inventory = player.getInventory();
+                inventory.setChestplate(new ItemStack(Material.AIR));
+            }
+        }, 3000);
     }
 
     public static void stopPeriod(){

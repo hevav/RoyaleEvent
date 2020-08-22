@@ -1,8 +1,12 @@
 package dev.hevav.royaleevent.types;
 
+import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.BlockHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,12 +28,13 @@ public class Chunkable {
     public static Chunkable fromLocation(Location location) {
         List<List<List<Material>>> chunk = new ArrayList<>();
         Location chunkLocation = BlockHelper.getChunkableStart(location);
-        for (int i = 0; i < 5; i++) {
+        World world = chunkLocation.getWorld();
+        for (int i = chunkLocation.getBlockY()-1; i < chunkLocation.getBlockY()+5; i++) {
             List<List<Material>> chunkXY = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
+            for (int j = chunkLocation.getBlockX()-1; j < chunkLocation.getBlockX() + 5; j++) {
                 List<Material> chunkX = new ArrayList<>();
-                for (int k = 0; k < 5; k++) {
-                    Material material = chunkLocation.add(k, j, i).getBlock().getType();
+                for (int k = chunkLocation.getBlockZ()-1; k < chunkLocation.getBlockZ() + 5; k++) {
+                    Material material = world.getBlockAt(j, i, k).getType();
                     chunkX.add(material);
                 }
                 chunkXY.add(chunkX);
@@ -40,13 +45,19 @@ public class Chunkable {
     }
 
     public void replaceWith(Chunkable chunkable) {
-        if (BlockHelper.verifyChunk(this)) {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    for (int k = 0; k < 5; k++) {
-                        Material setMaterial = chunkable.chunk.get(i).get(j).get(k);
-                        if (setMaterial != Material.AIR)
-                            startLocation.add(k, i, j).getBlock().setType(setMaterial);
+        World world = startLocation.getWorld();
+        int x = startLocation.getBlockX();
+        int y = startLocation.getBlockY();
+        int z = startLocation.getBlockZ();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 5; k++) {
+                    Material setMaterial = chunkable.chunk.get(j).get(i).get(k);
+                    Block block = world.getBlockAt(x+j, y+i, z+k);
+                    if (setMaterial != Material.AIR && block.getType() == Material.AIR){
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+                            block.setType(setMaterial);
+                        });
                     }
                 }
             }

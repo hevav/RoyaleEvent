@@ -24,6 +24,8 @@ public class RoyaleHelper {
     public static void initRoyale(Server server, World initWorld){
         server.broadcastMessage(ChatColor.GOLD + "[RE] Ивент запущен");
         server.broadcastMessage(ChatColor.GOLD + "[RE] Плагин написал hevav");
+        server.broadcastMessage(ChatColor.GOLD + "[RE] Летите на элитрах с автобуса!");
+        server.broadcastMessage(ChatColor.GOLD + "[RE] Посмотрите наверх для экстренной посадки");
         Location middleLocation = new Location(initWorld, (Integer) RoyaleEvent.config.get("midXcord"), (Integer) RoyaleEvent.config.get("midYcord"), (Integer) RoyaleEvent.config.get("midZcord"));
         for(Player player : server.getOnlinePlayers()){
             PlayerInventory inventory = player.getInventory();
@@ -72,7 +74,6 @@ public class RoyaleHelper {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 
-            player.setResourcePack("https://ws1.hevav.dev/cloud/fortnite.zip");
             player.sendTitle(ChatColor.GOLD+"Игра начата!", "RoyaleEvent by hevav", 5, 80, 5);
         }
         started = true;

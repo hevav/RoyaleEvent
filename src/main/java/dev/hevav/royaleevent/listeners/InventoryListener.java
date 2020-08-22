@@ -77,16 +77,4 @@ public class InventoryListener implements org.bukkit.event.Listener{
             inventory.setItem(item.inventoryNumber, curItem);
         }
     }
-
-    @EventHandler(priority = EventPriority.NORMAL)
-    public static void onEvent(PlayerMoveEvent event){ //TODO: redo
-        if(RoyaleHelper.isStarted()){
-            PlayerInventory inventory = event.getPlayer().getInventory();
-            if(inventory.getChestplate() != null &&
-                    !event.getPlayer().isOnGround() &&
-                    inventory.getChestplate().getType() == Material.ELYTRA &&
-                    event.getTo().getY()+2 < (Integer) RoyaleEvent.config.get("midYcord"))
-                inventory.setChestplate(new ItemStack(Material.AIR));
-        }
-    }
 }

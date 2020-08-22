@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,16 +57,17 @@ public class WeaponListener implements org.bukkit.event.Listener {
                     snowball.setVelocity(snowball.getVelocity().multiply(weapon.velocity/3));
                     snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
                     snowball.setMetadata("killer", new FixedMetadataValue(RoyaleEvent.getInstance(), event.getPlayer().getName()));
-                    Location toTeleport = event.getPlayer().getLocation();
-                    toTeleport.setYaw(toTeleport.getYaw() + weapon.playerYaw*3);
-                    toTeleport.setPitch(toTeleport.getPitch() + weapon.playerPitch*3);
-                    event.getPlayer().teleport(toTeleport);
+                    float prevVelocity = event.getPlayer().getWalkSpeed();
+                    event.getPlayer().setWalkSpeed(prevVelocity * weapon.playerVelocity);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+                        event.getPlayer().setWalkSpeed(prevVelocity);
+                    });
                     break;
                 case RIGHT_CLICK_BLOCK:
                     Block clickedBlock = event.getClickedBlock();
-                    if(clickedBlock.getType() == Material.CHEST){
+                    if(clickedBlock.getType().equals(Material.CHEST)){
                         clickedBlock.setType(Material.AIR);
-                        WeaponHelper.doRandomWeaponDrop(clickedBlock.getLocation(), 3);
+                        WeaponHelper.doRandomWeaponDrop(clickedBlock.getLocation(), 5);
                     }
                 case RIGHT_CLICK_AIR:
                     if(event.hasItem()){
@@ -130,7 +132,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryOpenEvent event) {
-        if(RoyaleHelper.isStarted() && event.getInventory().getType() == InventoryType.CHEST)
+        if(RoyaleHelper.isStarted() && event.getInventory().getType().equals(InventoryType.CHEST))
             event.setCancelled(true);
     }
 
@@ -141,10 +143,11 @@ public class WeaponListener implements org.bukkit.event.Listener {
             PlayerInventory inventory = event.getPlayer().getInventory();
             ItemStack item = inventory.getItemInMainHand();
             Block clickedBlock = event.getBlock();
-            if(item != null && item.getType() == Material.STONE_PICKAXE){
+            if(item != null && item.getType().equals(Material.STONE_PICKAXE)){
                 switch (clickedBlock.getType()) {
                     case LOG:
-                        for(Block block : BlockHelper.getBlocks(clickedBlock, 3, 7, 3)){
+                    case LOG_2:
+                        for(Block block : BlockHelper.getBlocks(clickedBlock, 3, 21, 3)){
                             ItemStack curItem = inventory.getItem(6);
                             if(curItem.getAmount() > 100)
                                 break;
@@ -153,9 +156,9 @@ public class WeaponListener implements org.bukkit.event.Listener {
                             inventory.setItem(6, curItem);
                         }
                         return;
-                    case ENDER_CHEST:
+                    case DIAMOND_BLOCK:
                         event.getPlayer().getServer().broadcastMessage(ChatColor.GOLD + "[RE] Кто-то нашел эйрдроп");
-                        WeaponHelper.doRandomWeaponDrop(clickedBlock.getLocation(), 5);
+                        WeaponHelper.doRandomWeaponDrop(clickedBlock.getLocation(), 8);
                         clickedBlock.setType(Material.AIR);
                         return;
                 }
@@ -168,7 +171,6 @@ public class WeaponListener implements org.bukkit.event.Listener {
                 int setAmount = curItem.getAmount()+BlockHelper.deleteChunk(clickedBlock.getLocation(), clickedBlock.getType());
                 curItem.setAmount(setAmount);
                 inventory.setItem(itemInventorable.inventoryNumber, curItem);
-                clickedBlock.setType(Material.AIR);
             }
         }
     }

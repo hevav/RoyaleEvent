@@ -42,6 +42,8 @@ public class OtherItems extends Inventorable {
             case BRICK_STAIRS:
                 return OtherItems.BricksStairs;
             case IRON_BLOCK:
+            case QUARTZ_BLOCK:
+            case QUARTZ_STAIRS:
                 return OtherItems.Iron;
             case STONE_SLAB2:
                 return OtherItems.IronSlab;

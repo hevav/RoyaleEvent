@@ -28,10 +28,10 @@ public class InventoryHelper {
     }
 
     public static boolean checkForMaterial(PlayerInventory inventory, Material material){
-        return inventory.getItem(1).getType() == material ||
-                inventory.getItem(2).getType() == material ||
-                inventory.getItem(3).getType() == material ||
-                inventory.getItem(4).getType() == material ||
-                inventory.getItem(5).getType() == material;
+        return  inventory.getItem(1).getType().equals(material) ||
+                inventory.getItem(2).getType().equals(material) ||
+                inventory.getItem(3).getType().equals(material) ||
+                inventory.getItem(4).getType().equals(material) ||
+                inventory.getItem(5).getType().equals(material);
     }
 }

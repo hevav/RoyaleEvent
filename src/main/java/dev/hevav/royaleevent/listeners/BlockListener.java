@@ -26,11 +26,11 @@ public class BlockListener implements org.bukkit.event.Listener {
             ItemStack item = inventory.getItemInMainHand();
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
-            if(block == null || amount < 2)
+            if(block == null || amount < 6)
                 return;
 
-            Chunkable.fromLocation(BlockHelper.nextChunkByPlayer(event.getPlayer().getLocation(), event.getBlock().getLocation())).replaceWith(block.chunkable);
-            item.setAmount(amount-1);
+            Chunkable.fromLocation(event.getBlock().getLocation()).replaceWith(block.chunkable);
+            item.setAmount(amount-5);
             inventory.setItem(block.inventoryNumber, item);
         }
     }
