@@ -21,7 +21,7 @@ public class BlockListener implements org.bukkit.event.Listener {
         if(RoyaleHelper.isStarted()){
             PlayerInventory inventory = event.getPlayer().getInventory();
             ItemStack item = inventory.getItemInMainHand();
-            Inventorable block = OtherItems.getItemByMaterial(item.getType());
+            OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
             if(block == null || amount < 2){
                 event.setCancelled(true);
@@ -45,7 +45,7 @@ public class BlockListener implements org.bukkit.event.Listener {
                 return;
             Inventory inventory = event.getPlayer().getInventory();
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
-                Inventorable toPlace = OtherItems.switchItem(item.getType());
+                OtherItems toPlace = OtherItems.switchItem(item.getType());
                 if(toPlace == null)
                     return;
                 ItemStack block = new ItemStack(toPlace.material, inventory.getItem(toPlace.inventoryNumber).getAmount());

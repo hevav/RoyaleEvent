@@ -1,5 +1,6 @@
 package dev.hevav.royaleevent.helpers;
 
+import dev.hevav.royaleevent.types.Chunkable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 
@@ -26,8 +27,8 @@ public class BlockHelper {
         Location borderCenter = border.getCenter();
         int dist = (int) border.getSize()/3;
 
-        int x = (int) (Math.random()*dist + dist);
-        int z = (int) (Math.random()*dist + dist);
+        int x = (int) (Math.random()*dist - dist/2);
+        int z = (int) (Math.random()*dist - dist/2);
 
         Location location = borderCenter.add(x, 0, z);
         Chunk chunk = location.getChunk();
@@ -44,5 +45,35 @@ public class BlockHelper {
         }
 
         return location;
+    }
+
+    public static Location getChunkableStart(Location fromLocation){
+        int xId = fromLocation.getBlockX()/5;
+        int yId = fromLocation.getBlockY()/5;
+        int zId = fromLocation.getBlockZ()/5;
+        return new Location(fromLocation.getWorld(), xId*5, yId*5, zId*5);
+    }
+
+    public static void deleteChunk(Location fromLocation){
+        Location removeLocation = getChunkableStart(fromLocation);
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                for(int k = 0; k < 5; k++){
+                    removeLocation.add(k, j, i).getBlock().setType(Material.AIR);
+                }
+            }
+        }
+    }
+
+    public static boolean verifyChunk(Chunkable chunkable){
+        for (int i = 1; i < 4; i++){
+            for (int j = 1; j < 4; j++){
+                for(int k = 1; k < 4; k++){
+                    if(chunkable.chunk.get(i).get(j).get(k) != Material.AIR)
+                        return false;
+                }
+            }
+        }
+        return true;
     }
 }

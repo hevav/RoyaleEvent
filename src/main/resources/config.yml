@@ -5,8 +5,6 @@ midZcord: 0
 #Game periods (worldborder and loot)
 #loot = chest but with inverted chance
 periods:
-  deletetrain:
-    time: 60
   worldborder:
     - type: radius
       radius: 300

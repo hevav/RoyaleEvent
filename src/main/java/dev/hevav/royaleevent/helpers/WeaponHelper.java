@@ -1,6 +1,7 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
+import dev.hevav.royaleevent.types.Drinkable;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import dev.hevav.royaleevent.types.Weapon;
@@ -16,16 +17,16 @@ public class WeaponHelper {
         Random random = new Random();
         for(int i = 0; i<threads; i++) {
             Inventorable inventorable;
-            switch(random.nextInt(12)){
+            switch(random.nextInt(15)){
                 case 0:
-                case 1:
                     inventorable = Weapon.Tactical;
                     break;
+                case 1:
                 case 2:
                 case 3:
+                case 4:
                     inventorable = Weapon.Pistol;
                     break;
-                case 4:
                 case 5:
                     inventorable = Weapon.SCAR;
                     break;
@@ -41,6 +42,15 @@ public class WeaponHelper {
                 case 11:
                     inventorable = OtherItems.Patron;
                     break;
+                case 12:
+                    inventorable = OtherItems.Iron;
+                    break;
+                case 13:
+                    inventorable = Drinkable.Slurp;
+                    break;
+                case 14:
+                    inventorable = Drinkable.Regen;
+                    break;
                 default:
                     inventorable = OtherItems.Bricks;
             }
@@ -48,11 +58,10 @@ public class WeaponHelper {
         }
     }
 
-    public static void doReload(int inventoryNumber, PlayerInventory inventory){
-        ItemStack reloadWeapon = inventory.getItem(inventoryNumber);
+    public static void doReload(PlayerInventory inventory, Weapon weapon){
+        ItemStack reloadWeapon = inventory.getItemInMainHand();
         ItemStack patrons = inventory.getItemInOffHand();
-        Weapon weapon = Weapon.getWeaponByMaterial(reloadWeapon.getType());
-        if(patrons.getAmount() < 2 || weapon == null)
+        if(patrons.getAmount() < 2)
             return;
         int leftToFull = weapon.reloadSize - reloadWeapon.getAmount();
         reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
@@ -61,7 +70,7 @@ public class WeaponHelper {
 
         RoyaleEvent plugin = RoyaleEvent.getInstance();
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, ()->{
-            inventory.setItem(inventoryNumber, reloadWeapon);
+            inventory.setItemInMainHand(reloadWeapon);
         }, weapon.reloadTicks);
     }
 }

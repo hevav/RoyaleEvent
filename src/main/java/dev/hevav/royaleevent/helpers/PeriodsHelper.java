@@ -16,19 +16,10 @@ public class PeriodsHelper {
     public static void doPeriod(Server server, World world, Location middleLocation){
         List<HashMap<Object, Object>> borderPeriod = (List<HashMap<Object, Object>>) RoyaleEvent.config.get("periods.worldborder");
         List<HashMap<Object, Object>> dropPeriod = (List<HashMap<Object, Object>>) RoyaleEvent.config.get("periods.loot");
-        int deleteTrainPeriod = RoyaleEvent.config.getInt("periods.deletetrain.time");
         WorldBorder worldBorder = world.getWorldBorder();
         worldBorder.setCenter(middleLocation);
 
         scheduler = server.getScheduler();
-
-        scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-            server.broadcastMessage(ChatColor.GOLD+"[RE] Удаляю поезд :)");
-            for(Block block : BlockHelper.getBlocks(middleLocation.getBlock(), 60, 15, 60)){
-                block.setType(Material.AIR);
-            }
-        }, deleteTrainPeriod*20);
-
         int tickForBorder = 0;
         for (HashMap<Object, Object> border : borderPeriod){
             int time = (Integer) border.get("time");

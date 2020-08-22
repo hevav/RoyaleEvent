@@ -2,8 +2,10 @@ package dev.hevav.royaleevent.listeners;
 
 import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.BlockHelper;
+import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.helpers.WeaponHelper;
+import dev.hevav.royaleevent.types.Drinkable;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import dev.hevav.royaleevent.types.Weapon;
@@ -21,6 +23,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,9 +32,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class WeaponListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)
@@ -53,7 +54,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                     if(stack.getAmount() == 1)
                         return;
                     stack.setAmount(stack.getAmount()-1);
-                    inventory.setItem(weapon.inventoryNumber, stack);
+                    inventory.setItemInMainHand(stack);
                     Snowball snowball = event.getPlayer().launchProjectile(Snowball.class);
                     snowball.setVelocity(snowball.getVelocity().multiply(weapon.velocity/3));
                     snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
@@ -74,7 +75,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         weapon = Weapon.getWeaponByMaterial(event.getItem().getType());
                         if(weapon == null)
                             return;
-                        WeaponHelper.doReload(weapon.inventoryNumber, inventory);
+                        WeaponHelper.doReload(inventory, weapon);
                     }
                     break;
             }
@@ -161,7 +162,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         clickedBlock.setType(Material.AIR);
                         return;
                 }
-                Inventorable itemInventorable = OtherItems.getItemByMaterial(clickedBlock.getType());
+                OtherItems itemInventorable = OtherItems.getItemByMaterial(clickedBlock.getType());
                 if(itemInventorable == null)
                     return;
                 ItemStack curItem = inventory.getItem(itemInventorable.inventoryNumber);
@@ -177,24 +178,33 @@ public class WeaponListener implements org.bukkit.event.Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public static void onEvent(EntityPickupItemEvent event) {
         if(RoyaleHelper.isStarted() && event.getEntity() instanceof Player) {
-            event.setCancelled(true);
-
             ItemStack pickupItem = event.getItem().getItemStack();
             PlayerInventory inventory = ((Player) event.getEntity()).getInventory();
 
             Weapon weapon = Weapon.getWeaponByMaterial(pickupItem.getType());
-            if(weapon == null)
+            if(weapon == null) {
+                event.setCancelled(true);
                 return;
-
-            if(inventory.getItem(weapon.inventoryNumber) == null) {
-                ItemMeta pickupMeta = pickupItem.getItemMeta();
-                pickupMeta.setDisplayName(weapon.name);
-                pickupItem.setItemMeta(pickupMeta);
-                inventory.setItem(weapon.inventoryNumber, pickupItem);
             }
+
+            ItemMeta pickupMeta = pickupItem.getItemMeta();
+            pickupMeta.setDisplayName(weapon.name);
+            pickupItem.setItemMeta(pickupMeta);
+            if(!InventoryHelper.addToFreeSlot(inventory, pickupItem))
+                event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public static void onEvent(PlayerItemConsumeEvent event){
+        if(RoyaleHelper.isStarted()){
+            Drinkable drinkable = Drinkable.getDrinkableFromMaterial(event.getItem().getType());
+            if(drinkable == null)
+                return;
+            drinkable.drink(event.getPlayer());
         }
     }
 }

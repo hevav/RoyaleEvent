@@ -1,7 +1,9 @@
 package dev.hevav.royaleevent.listeners;
 
 import dev.hevav.royaleevent.RoyaleEvent;
+import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
+import dev.hevav.royaleevent.types.Drinkable;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import org.bukkit.Material;
@@ -15,17 +17,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class InventoryListener implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryClickEvent event){
-        if(RoyaleHelper.isStarted())
+        if(RoyaleHelper.isStarted() && (event.getSlot() < 1 || event.getSlot() > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryDragEvent event){
-        if(RoyaleHelper.isStarted())
+        if(RoyaleHelper.isStarted() && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
             event.setCancelled(true);
     }
 
@@ -51,9 +54,17 @@ public class InventoryListener implements org.bukkit.event.Listener{
                 return;
             }
 
-            Inventorable item = OtherItems.getItemByMaterial(pickupItem.getType());
+            OtherItems item = OtherItems.getItemByMaterial(pickupItem.getType());
             if(item == null) {
-                event.setCancelled(true);
+                Inventorable item2 = Drinkable.getDrinkableFromMaterial(pickupItem.getType());
+                if(item2 == null)
+                    return;
+
+                ItemStack itemStack = new ItemStack(pickupItem.getType());
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName(item2.name);
+                itemStack.setItemMeta(itemMeta);
+                InventoryHelper.addToFreeSlot(inventory, itemStack);
                 return;
             }
             ItemStack curItem = inventory.getItem(item.inventoryNumber);
@@ -68,13 +79,12 @@ public class InventoryListener implements org.bukkit.event.Listener{
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public static void onEvent(PlayerMoveEvent event){
+    public static void onEvent(PlayerMoveEvent event){ //TODO: redo
         if(RoyaleHelper.isStarted()){
             PlayerInventory inventory = event.getPlayer().getInventory();
             if(inventory.getChestplate() != null &&
-                    !event.getPlayer().isFlying() &&
+                    !event.getPlayer().isOnGround() &&
                     inventory.getChestplate().getType() == Material.ELYTRA &&
-                    event.getFrom().getY() < event.getTo().getY() &&
                     event.getTo().getY()+2 < (Integer) RoyaleEvent.config.get("midYcord"))
                 inventory.setChestplate(new ItemStack(Material.AIR));
         }

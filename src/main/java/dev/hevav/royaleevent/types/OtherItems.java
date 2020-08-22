@@ -3,6 +3,7 @@ package dev.hevav.royaleevent.types;
 import org.bukkit.Material;
 
 public class OtherItems extends Inventorable {
+    public Integer inventoryNumber;
 
     public OtherItems(Material material, Integer inventoryNumber, String name){
         this.material = material;
