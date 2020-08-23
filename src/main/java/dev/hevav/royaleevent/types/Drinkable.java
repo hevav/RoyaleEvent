@@ -19,7 +19,7 @@ public class Drinkable extends Inventorable {
         player.setFoodLevel(player.getFoodLevel()+redoFoodLevel);
     }
 
-    public static Drinkable Slurp = new Drinkable(Material.GLASS_BOTTLE, "Восстановитель здоровья", 10, 1);
+    public static Drinkable Slurp = new Drinkable(Material.GLASS_BOTTLE, "Восстановитель здоровья", 10, 1); //TODO: fix slurp
     public static Drinkable Regen = new Drinkable(Material.MILK_BUCKET, "Восстановитель хавки", 1, 10);
 
     public static Drinkable getDrinkableFromMaterial(Material material){

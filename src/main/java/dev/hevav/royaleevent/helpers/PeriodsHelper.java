@@ -2,7 +2,6 @@ package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -25,6 +24,7 @@ public class PeriodsHelper {
         int tickForBorder = 0;
         for (HashMap<Object, Object> border : borderPeriod){
             int time = (Integer) border.get("time");
+            tickForBorder += time*20 + 100;
             switch ((String) border.get("type")){
                 case "radius":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
@@ -39,7 +39,6 @@ public class PeriodsHelper {
                     }, tickForBorder);
                     break;
             }
-            tickForBorder += time*20;
         }
 
         int tickForDrop = 0;

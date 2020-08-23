@@ -1,10 +1,7 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
-import dev.hevav.royaleevent.types.Drinkable;
-import dev.hevav.royaleevent.types.Inventorable;
-import dev.hevav.royaleevent.types.OtherItems;
-import dev.hevav.royaleevent.types.Weapon;
+import dev.hevav.royaleevent.types.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -23,33 +20,31 @@ public class WeaponHelper {
                     break;
                 case 1:
                 case 2:
-                case 3:
-                case 4:
                     inventorable = Weapon.Pistol;
                     break;
-                case 5:
+                case 3:
                     inventorable = Weapon.SCAR;
                     break;
-                case 6:
+                case 4:
                     inventorable = Weapon.Sniper;
                     break;
-                case 7:
+                case 5:
                     inventorable = Weapon.UZI;
                     break;
+                case 6:
+                case 7:
                 case 8:
                 case 9:
-                case 10:
-                case 11:
                     inventorable = OtherItems.Patron;
                     break;
-                case 12:
+                case 10:
                     inventorable = OtherItems.Iron;
                     break;
-                case 13:
-                    inventorable = Drinkable.Slurp;
-                    break;
-                case 14:
+                case 11:
                     inventorable = Drinkable.Regen;
+                    break;
+                case 12:
+                    inventorable = Placeable.Campfire;
                     break;
                 default:
                     inventorable = OtherItems.Bricks;
@@ -64,13 +59,12 @@ public class WeaponHelper {
         if(patrons.getAmount() < 2)
             return;
         int leftToFull = weapon.reloadSize - reloadWeapon.getAmount();
-        reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
-        patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount() - 1));
-        inventory.setItemInOffHand(patrons);
 
         RoyaleEvent plugin = RoyaleEvent.getInstance();
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, ()->{
-            inventory.setItemInMainHand(reloadWeapon);
+            reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
+            patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount() - 1));
+            inventory.setItemInOffHand(patrons);
         }, weapon.reloadTicks);
     }
 }

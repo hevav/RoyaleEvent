@@ -57,10 +57,9 @@ public class WeaponListener implements org.bukkit.event.Listener {
                     snowball.setVelocity(snowball.getVelocity().multiply(weapon.velocity/3));
                     snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
                     snowball.setMetadata("killer", new FixedMetadataValue(RoyaleEvent.getInstance(), event.getPlayer().getName()));
-                    float prevVelocity = event.getPlayer().getWalkSpeed();
-                    event.getPlayer().setWalkSpeed(prevVelocity * weapon.playerVelocity);
+                    event.getPlayer().setWalkSpeed(0.2f / weapon.playerVelocity);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                        event.getPlayer().setWalkSpeed(prevVelocity);
+                        event.getPlayer().setWalkSpeed(0.2f);
                     });
                     break;
                 case RIGHT_CLICK_BLOCK:
@@ -163,8 +162,15 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         return;
                 }
                 OtherItems itemInventorable = OtherItems.getItemByMaterial(clickedBlock.getType());
-                if(itemInventorable == null)
+                if(itemInventorable == null) {
+                    Placeable placeable = Placeable.getPlaceableByPlacedMaterial(clickedBlock.getType());
+                    if(placeable == null)
+                        return;
+
+                    placeable.materials.forEach(material -> BlockHelper.deleteChunk(clickedBlock.getLocation(), material));
+                    InventoryHelper.addToFreeSlot(inventory, new ItemStack(placeable.material, 1));
                     return;
+                }
                 ItemStack curItem = inventory.getItem(itemInventorable.inventoryNumber);
                 if(curItem.getAmount() > 99)
                     return;
@@ -189,7 +195,6 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
             ItemMeta pickupMeta = pickupItem.getItemMeta();
             pickupMeta.setDisplayName(weapon.name);
-            pickupItem.setItemMeta(pickupMeta);
             if(!InventoryHelper.addToFreeSlot(inventory, pickupItem))
                 event.setCancelled(true);
         }

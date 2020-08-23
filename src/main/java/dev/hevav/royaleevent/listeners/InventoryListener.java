@@ -3,9 +3,7 @@ package dev.hevav.royaleevent.listeners;
 import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
-import dev.hevav.royaleevent.types.Drinkable;
-import dev.hevav.royaleevent.types.Inventorable;
-import dev.hevav.royaleevent.types.OtherItems;
+import dev.hevav.royaleevent.types.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,13 +21,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class InventoryListener implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryClickEvent event){
-        if(RoyaleHelper.isStarted() && (event.getSlot() < 1 || event.getSlot() > 5))
+        if (RoyaleHelper.isStarted() && (event.getSlot() < 1 || event.getSlot() > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    public static void onEvent(PlayerDropItemEvent event){
+        if (RoyaleHelper.isStarted()){
+            Material type = event.getItemDrop().getItemStack().getType();
+            if (OtherItems.getItemByMaterial(type) != null || type == Material.STONE_PICKAXE)
+                event.setCancelled(true);
+            if (Weapon.getWeaponByMaterial(type) != null){
+                ItemStack prevItemStack = event.getItemDrop().getItemStack();
+                prevItemStack.setAmount(1);
+                event.getItemDrop().setItemStack(prevItemStack);
+                PlayerInventory inventory = event.getPlayer().getInventory();
+                if(inventory.getItemInMainHand().getType() == prevItemStack.getType())
+                    inventory.setItemInMainHand(new ItemStack(Material.AIR));
+                else
+                    inventory.setItem((Integer) inventory.all(prevItemStack.getType()).keySet().toArray()[0], new ItemStack(Material.AIR));
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryDragEvent event){
-        if(RoyaleHelper.isStarted() && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
+        if (RoyaleHelper.isStarted() && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
             event.setCancelled(true);
     }
 
@@ -58,7 +76,9 @@ public class InventoryListener implements org.bukkit.event.Listener{
             if(item == null) {
                 Inventorable item2 = Drinkable.getDrinkableFromMaterial(pickupItem.getType());
                 if(item2 == null)
-                    return;
+                    item2 = Placeable.getPlaceableByMaterial(pickupItem.getType());
+                    if(item2 == null)
+                        return;
 
                 ItemStack itemStack = new ItemStack(pickupItem.getType());
                 ItemMeta itemMeta = itemStack.getItemMeta();

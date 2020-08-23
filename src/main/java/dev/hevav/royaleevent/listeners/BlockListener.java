@@ -1,17 +1,23 @@
 package dev.hevav.royaleevent.listeners;
 
+import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.BlockHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.types.Chunkable;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
+import dev.hevav.royaleevent.types.Placeable;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -26,10 +32,22 @@ public class BlockListener implements org.bukkit.event.Listener {
             ItemStack item = inventory.getItemInMainHand();
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
-            if(block == null || amount < 6)
+            Chunkable chunkable = Chunkable.fromLocation(event.getBlock().getLocation());
+            int yaw = (int) event.getPlayer().getLocation().getYaw();
+            if(block == null){
+                Placeable placeable = Placeable.getPlaceableByMaterial(item.getType());
+                if(placeable == null)
+                    return;
+
+                chunkable.replaceWith(placeable.chunkable.rotate(yaw));
+                item.setAmount(amount-1);
+                Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s", ChatColor.GREEN, placeable.tutorial));
+                return;
+            }
+            if(amount < 6)
                 return;
 
-            Chunkable.fromLocation(event.getBlock().getLocation()).replaceWith(block.chunkable);
+            chunkable.replaceWith(block.chunkable.rotate(yaw));
             item.setAmount(amount-5);
             inventory.setItem(block.inventoryNumber, item);
         }
@@ -56,6 +74,25 @@ public class BlockListener implements org.bukkit.event.Listener {
                 blockMeta.setDisplayName(toPlace.name);
                 block.setItemMeta(blockMeta);
                 inventory.setItem(toPlace.inventoryNumber, block);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public static void onEvent(PlayerToggleSneakEvent event) {
+        if(RoyaleHelper.isStarted() && event.isSneaking()){
+            Player player = event.getPlayer();
+            Placeable placeable = Placeable.getPlaceableByPlacedMaterial(player.getLocation().add(0, -1, 0).getBlock().getType());
+            if(placeable != null){
+                switch(placeable.material){
+                    case FURNACE:
+                        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "[RE] Хилюсь...");
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+                            player.setHealth(player.getHealth()+1);
+                            Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "[RE] Захилился :)");
+                        }, 20);
+                        break;
+                }
             }
         }
     }

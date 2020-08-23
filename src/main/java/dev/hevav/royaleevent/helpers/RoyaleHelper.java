@@ -11,10 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class RoyaleHelper {
 
@@ -71,9 +68,6 @@ public class RoyaleHelper {
 
             player.teleport(middleLocation);
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
-
             player.sendTitle(ChatColor.GOLD+"Игра начата!", "RoyaleEvent by hevav", 5, 80, 5);
         }
         started = true;
@@ -83,6 +77,7 @@ public class RoyaleHelper {
     public static void stopRoyale(Server server){
         server.broadcastMessage(ChatColor.GOLD + "[RE] Ивент закончен");
         PeriodsHelper.stopPeriod();
+        killerStats.clear();
         started = false;
     }
 
@@ -113,6 +108,9 @@ public class RoyaleHelper {
         List<Integer> killsTop = new ArrayList<>(killerStats.values());
         Collections.sort(killsTop);
         Collections.reverse(killsTop);
+        Set<Integer> killsSet = new HashSet<>(killsTop);
+        killsTop.clear();
+        killsTop.addAll(killsSet);
 
         for(int i = 0; i < Math.min(3, killsTop.size()); i++){
             StringBuilder nicks = new StringBuilder();

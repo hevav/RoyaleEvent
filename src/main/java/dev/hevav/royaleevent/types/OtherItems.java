@@ -15,15 +15,15 @@ public class OtherItems extends Inventorable {
 
     public static OtherItems Patron = new OtherItems(Material.TRIPWIRE_HOOK, null, "Патроны", null);
 
-    public static OtherItems Wood = new OtherItems(Material.WOOD, 6, "Поставить доски(ЛКМ для смены)", Chunkable.Walls(Material.WOOD));
-    public static OtherItems WoodStep = new OtherItems(Material.WOOD_STEP, 6, "Поставить деревянный полублок(ЛКМ для смены)", Chunkable.Steps(Material.WOOD));
+    public static OtherItems Wood = new OtherItems(Material.WOOD, 6, "Поставить деревянную стену(ЛКМ для смены)", Chunkable.Walls(Material.WOOD));
+    public static OtherItems WoodStep = new OtherItems(Material.WOOD_STEP, 6, "Поставить деревянный потолок(ЛКМ для смены)", Chunkable.Steps(Material.WOOD));
     public static OtherItems WoodStairs = new OtherItems(Material.WOOD_STAIRS, 6, "Поставить деревянную лестницу(ЛКМ для смены)", Chunkable.Stairs(Material.WOOD));
 
-    public static OtherItems Bricks = new OtherItems(Material.BRICK, 7, "Поставить кирпич(ЛКМ для смены)", Chunkable.Walls(Material.BRICK));
+    public static OtherItems Bricks = new OtherItems(Material.BRICK, 7, "Поставить кирпичную стену(ЛКМ для смены)", Chunkable.Walls(Material.BRICK));
     public static OtherItems BricksStairs = new OtherItems(Material.BRICK_STAIRS, 7, "Поставить кирпичную лестницу(ЛКМ для смены)", Chunkable.Stairs(Material.BRICK_STAIRS));
 
-    public static OtherItems Iron = new OtherItems(Material.IRON_BLOCK, 8, "Патроны", Chunkable.Walls(Material.IRON_BLOCK));
-    public static OtherItems IronSlab = new OtherItems(Material.STONE_SLAB2, 8, "Поставить железный полублок(ЛКМ для смены)", Chunkable.Steps(Material.IRON_BLOCK));
+    public static OtherItems Iron = new OtherItems(Material.IRON_BLOCK, 8, "Поставить железную стену(ЛКМ для смены)", Chunkable.Walls(Material.IRON_BLOCK));
+    public static OtherItems IronSlab = new OtherItems(Material.STONE_SLAB2, 8, "Поставить железный потолок(ЛКМ для смены)", Chunkable.Steps(Material.IRON_BLOCK));
     public static OtherItems IronFence = new OtherItems(Material.IRON_FENCE, 8, "Поставить железный забор(ЛКМ для смены)", Chunkable.Walls(Material.IRON_FENCE));
 
     public static OtherItems getItemByMaterial(Material material){

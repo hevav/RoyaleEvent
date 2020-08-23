@@ -4,8 +4,10 @@ import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.types.Chunkable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BlockHelper {
 
@@ -74,4 +76,23 @@ public class BlockHelper {
         }
         return count/5;
     }
+
+    public static <T> List<List<T>> transpose(List<List<T>> table) {
+        List<List<T>> ret = new ArrayList<>();
+        final int N = table.get(0).size();
+        for (int i = 0; i < N; i++) {
+            List<T> col = new ArrayList<T>();
+            for (List<T> row : table) {
+                col.add(row.get(i));
+            }
+            ret.add(col);
+        }
+        return ret;
+    }
+
+    public static BlockFace yawToFace(float yaw) {
+        return axis[Math.round(yaw / 90f) & 0x3].getOppositeFace();
+    }
+
+    private static final BlockFace[] axis = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
 }
