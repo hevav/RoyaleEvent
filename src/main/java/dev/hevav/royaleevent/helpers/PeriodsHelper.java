@@ -24,7 +24,6 @@ public class PeriodsHelper {
         int tickForBorder = 0;
         for (HashMap<Object, Object> border : borderPeriod){
             int time = (Integer) border.get("time");
-            tickForBorder += time*20 + 100;
             switch ((String) border.get("type")){
                 case "radius":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
@@ -39,6 +38,7 @@ public class PeriodsHelper {
                     }, tickForBorder);
                     break;
             }
+            tickForBorder += time*20 + 100;
         }
 
         int tickForDrop = 0;

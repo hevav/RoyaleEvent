@@ -32,8 +32,8 @@ public class BlockListener implements org.bukkit.event.Listener {
             ItemStack item = inventory.getItemInMainHand();
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
-            Chunkable chunkable = Chunkable.fromLocation(event.getBlock().getLocation());
-            int yaw = (int) event.getPlayer().getLocation().getYaw();
+            float yaw = event.getPlayer().getLocation().getYaw();
+            Chunkable chunkable = Chunkable.fromLocation(BlockHelper.nextChunkByYaw(event.getBlock().getLocation(), yaw));
             if(block == null){
                 Placeable placeable = Placeable.getPlaceableByMaterial(item.getType());
                 if(placeable == null)
@@ -41,7 +41,7 @@ public class BlockListener implements org.bukkit.event.Listener {
 
                 chunkable.replaceWith(placeable.chunkable.rotate(yaw));
                 item.setAmount(amount-1);
-                Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s", ChatColor.GREEN, placeable.tutorial));
+                event.getPlayer().sendMessage(String.format("%s[RE] %s", ChatColor.GREEN, placeable.tutorial));
                 return;
             }
             if(amount < 6)
@@ -86,10 +86,10 @@ public class BlockListener implements org.bukkit.event.Listener {
             if(placeable != null){
                 switch(placeable.material){
                     case FURNACE:
-                        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "[RE] Хилюсь...");
+                        player.sendMessage(ChatColor.GREEN + "[RE] Хилюсь...");
                         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                             player.setHealth(player.getHealth()+1);
-                            Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "[RE] Захилился :)");
+                            player.sendMessage(ChatColor.GREEN + "[RE] Захилился :)");
                         }, 20);
                         break;
                 }

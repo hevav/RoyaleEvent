@@ -38,8 +38,6 @@ public class InventoryListener implements org.bukkit.event.Listener{
                 PlayerInventory inventory = event.getPlayer().getInventory();
                 if(inventory.getItemInMainHand().getType() == prevItemStack.getType())
                     inventory.setItemInMainHand(new ItemStack(Material.AIR));
-                else
-                    inventory.setItem((Integer) inventory.all(prevItemStack.getType()).keySet().toArray()[0], new ItemStack(Material.AIR));
             }
         }
     }

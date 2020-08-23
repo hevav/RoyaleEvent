@@ -7,20 +7,25 @@ groundY: 80
 periods:
   worldborder:
     - type: radius
-      radius: 780
-      time: 300
+      radius: 999
+      time: 20
     - type: wait
-      time: 200
+      time: 20
+    - type: radius
+      radius: 780
+      time: 600
+    - type: wait
+      time: 400
     - type: radius
       radius: 600
-      time: 300
+      time: 400
     - type: wait
-      time: 200
+      time: 400
     - type: radius
       radius: 450
-      time: 300
-    - type: wait
       time: 200
+    - type: wait
+      time: 100
     - type: radius
       radius: 75
       time: 150

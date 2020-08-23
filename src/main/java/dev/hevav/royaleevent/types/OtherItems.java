@@ -29,15 +29,13 @@ public class OtherItems extends Inventorable {
     public static OtherItems getItemByMaterial(Material material){
         switch (material) {
             case WOOD:
+            case CACTUS:
                 return OtherItems.Wood;
             case WOOD_STAIRS:
                 return OtherItems.WoodStairs;
             case WOOD_STEP:
                 return OtherItems.WoodStep;
             case BRICK:
-            case CLAY_BRICK:
-            case STAINED_CLAY:
-            case HARD_CLAY:
                 return OtherItems.Bricks;
             case BRICK_STAIRS:
                 return OtherItems.BricksStairs;

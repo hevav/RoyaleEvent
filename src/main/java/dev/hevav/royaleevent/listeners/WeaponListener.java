@@ -195,6 +195,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
             ItemMeta pickupMeta = pickupItem.getItemMeta();
             pickupMeta.setDisplayName(weapon.name);
+            pickupItem.setItemMeta(pickupMeta);
             if(!InventoryHelper.addToFreeSlot(inventory, pickupItem))
                 event.setCancelled(true);
         }

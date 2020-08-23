@@ -22,11 +22,11 @@ public class Weapon extends Inventorable{
         this.material = material;
     }
 
-    public static Weapon Tactical = new Weapon(Material.WOOD_HOE, 7, 120, 6, 4, 70,1.5f, "Дробовик(ПКМ для перезаряда)");
-    public static Weapon Pistol = new Weapon(Material.STONE_HOE, 21, 30, 8, 1, 25,6.75f, "Пистолет(ПКМ для перезаряда)");
-    public static Weapon SCAR = new Weapon(Material.IRON_HOE, 41, 40, 6, 2, 35,5.5f, "Автомат(ПКМ для перезаряда)");
-    public static Weapon Sniper = new Weapon(Material.GOLD_HOE, 2, 80, 10, 10, 60,5.5f, "Снайперская винтовка(ПКМ для перезаряда)");
-    public static Weapon UZI = new Weapon(Material.DIAMOND_HOE, 26, 45, 8, 2, 35,5.5f, "Пистолет-пулемет(ПКМ для перезаряда)");
+    public static Weapon Tactical = new Weapon(Material.WOOD_HOE, 7, 12, 6, 4, 45,1.5f, "Дробовик(ПКМ для перезаряда)");
+    public static Weapon Pistol = new Weapon(Material.STONE_HOE, 21, 3, 8, 1, 25,6.75f, "Пистолет(ПКМ для перезаряда)");
+    public static Weapon SCAR = new Weapon(Material.IRON_HOE, 41, 4, 6, 2, 35,5.5f, "Автомат(ПКМ для перезаряда)");
+    public static Weapon Sniper = new Weapon(Material.GOLD_HOE, 2, 18, 15, 10, 60,5.5f, "Снайперская винтовка(ПКМ для перезаряда)");
+    public static Weapon UZI = new Weapon(Material.DIAMOND_HOE, 26, 5, 8, 2, 35,5.5f, "Пистолет-пулемет(ПКМ для перезаряда)");
 
     public static Weapon getWeaponByMaterial(Material material){
         switch (material){

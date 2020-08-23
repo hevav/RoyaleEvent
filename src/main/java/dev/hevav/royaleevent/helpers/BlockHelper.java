@@ -57,6 +57,24 @@ public class BlockHelper {
         return new Location(fromLocation.getWorld(), xId*5, yId*5, zId*5);
     }
 
+    public static Location nextChunkByYaw(Location fromLocation, float yaw){
+        int xId = fromLocation.getBlockX();
+        int yId = fromLocation.getBlockY()-1;
+        int zId = fromLocation.getBlockZ();
+        switch (yawToFace(yaw)){
+            case NORTH:
+                zId -= 1;
+            case EAST:
+                xId += 1;
+            case SOUTH:
+                zId += 1;
+            case WEST:
+                xId -= 1;
+                break;
+        }
+        return new Location(fromLocation.getWorld(), xId, yId, zId);
+    }
+
     public static int deleteChunk(Location fromLocation, Material material){
         Location removeLocation = getChunkableStart(fromLocation);
         World world = removeLocation.getWorld();

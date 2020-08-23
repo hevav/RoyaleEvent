@@ -65,7 +65,7 @@ public class Chunkable {
         }
     }
 
-    public Chunkable rotate(int yaw){
+    public Chunkable rotate(float yaw){
         List<List<List<Material>>> chunk = new ArrayList<>();
         switch (BlockHelper.yawToFace(yaw)){
             case WEST:
