@@ -39,6 +39,9 @@ public class Placeable extends Inventorable {
             case YELLOW_GLAZED_TERRACOTTA:
             case ORANGE_GLAZED_TERRACOTTA:
                 return Campfire;
+            case CARPET:
+            case SLIME_BLOCK:
+                return Jumppad;
             default:
                 return null;
         }

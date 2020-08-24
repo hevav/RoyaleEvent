@@ -10,7 +10,6 @@ import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Chunkable {
@@ -37,7 +36,7 @@ public class Chunkable {
                 for (int k = chunkLocation.getBlockZ()-1; k < chunkLocation.getBlockZ() + 5; k++) {
                     Material material = world.getBlockAt(j, i, k).getType();
                     if(findTopY && material == Material.AIR) {
-                        location.setY(i+2);
+                        location.setY(i);
                         return fromLocation(location, false);
                     }
                     chunkX.add(material);
@@ -135,6 +134,23 @@ public class Chunkable {
                     ),
                     Arrays.asList(
                             Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.STONE, Material.COAL_BLOCK, Material.STONE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.STONE, Material.COAL_BLOCK, Material.STONE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.COAL_BLOCK, Material.COAL_BLOCK, Material.STONE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
                                     Material.AIR, Material.WOOD_STEP, Material.WOOD_STAIRS, Material.WOOD_STEP, Material.AIR
                             ),
                             Arrays.asList(
@@ -183,23 +199,6 @@ public class Chunkable {
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             )
-                    ),
-                    Arrays.asList(
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            )
                     )
             )
     );
@@ -214,7 +213,41 @@ public class Chunkable {
                                     Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.STONE, Material.AIR, Material.STONE, Material.AIR
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
@@ -255,40 +288,6 @@ public class Chunkable {
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.CARPET, Material.CARPET, Material.CARPET, Material.AIR
-                            )
-                    ),
-                    Arrays.asList(
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            )
-                    ),
-                    Arrays.asList(
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             )
                     )
             )

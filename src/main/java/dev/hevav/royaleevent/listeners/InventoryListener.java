@@ -1,12 +1,10 @@
 package dev.hevav.royaleevent.listeners;
 
-import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.types.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +12,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -23,13 +20,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class InventoryListener implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryClickEvent event){
-        if (RoyaleHelper.isStarted() && (event.getSlot() < 1 || event.getSlot() > 5))
+        if (RoyaleHelper.isStarted() && event.getWhoClicked().hasPermission("royaleevent.interact") && (event.getSlot() < 1 || event.getSlot() > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerDropItemEvent event){
-        if (RoyaleHelper.isStarted()){
+        if (RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
             Material type = event.getItemDrop().getItemStack().getType();
             if (OtherItems.getItemByMaterial(type) != null || type == Material.STONE_PICKAXE)
                 event.setCancelled(true);
@@ -46,23 +43,31 @@ public class InventoryListener implements org.bukkit.event.Listener{
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryDragEvent event){
-        if (RoyaleHelper.isStarted() && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
+        if (RoyaleHelper.isStarted() && event.getWhoClicked().hasPermission("royaleevent.interact") && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerSwapHandItemsEvent event){
-        if(RoyaleHelper.isStarted())
+        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact"))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(EntityPickupItemEvent event){
         if(RoyaleHelper.isStarted() && event.getEntity() instanceof Player){
+            Player player = (Player) event.getEntity();
+            if(!player.hasPermission("royaleevent.interact")){
+                return;
+            }
             event.getItem().remove();
             event.setCancelled(true);
             ItemStack pickupItem = event.getItem().getItemStack();
-            Player player = (Player) event.getEntity();
+            if(!player.hasPermission("royaleevent.interact")) {
+                Location location = player.getLocation();
+                location.getWorld().dropItem(location, event.getItem().getItemStack());
+                return;
+            }
             PlayerInventory inventory = player.getInventory();
 
             if (pickupItem.getType() == Material.TRIPWIRE_HOOK){

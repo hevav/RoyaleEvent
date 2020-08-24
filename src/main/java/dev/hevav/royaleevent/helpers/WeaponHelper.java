@@ -45,6 +45,9 @@ public class WeaponHelper {
                 case 12:
                     inventorable = Placeable.Campfire;
                     break;
+                case 13:
+                    inventorable = Placeable.Jumppad;
+                    break;
                 default:
                     inventorable = OtherItems.Bricks;
             }

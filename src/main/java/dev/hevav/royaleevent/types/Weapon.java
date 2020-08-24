@@ -1,6 +1,7 @@
 package dev.hevav.royaleevent.types;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 
 public class Weapon extends Inventorable{
     public int reloadSize;
@@ -11,8 +12,9 @@ public class Weapon extends Inventorable{
     public int damage;
     public float cooldown;
     public int shootQuantity;
+    public Sound sound;
 
-    public Weapon(Material material, int reloadSize, int reloadTicks, int velocity, float playerVelocity, int damage, float cooldown, int shootQuantity, String name){
+    public Weapon(Material material, int reloadSize, int reloadTicks, int velocity, float playerVelocity, int damage, float cooldown, int shootQuantity, Sound sound, String name){
         this.reloadSize = reloadSize;
         this.reloadTicks = reloadTicks;
         this.velocity = velocity;
@@ -22,13 +24,14 @@ public class Weapon extends Inventorable{
         this.name = name;
         this.material = material;
         this.shootQuantity = shootQuantity;
+        this.sound = sound;
     }
 
-    public static Weapon Tactical = new Weapon(Material.WOOD_HOE, 7, 12, 6, 4, 45,1.5f, 3, "Дробовик(ПКМ для перезаряда)");
-    public static Weapon Pistol = new Weapon(Material.STONE_HOE, 21, 3, 8, 1, 25,6.75f, 1,"Пистолет(ПКМ для перезаряда)");
-    public static Weapon SCAR = new Weapon(Material.IRON_HOE, 41, 4, 6, 2, 35,5.5f, 1, "Автомат(ПКМ для перезаряда)");
-    public static Weapon Sniper = new Weapon(Material.GOLD_HOE, 2, 18, 15, 10, 60,5.5f, 1, "Снайперская винтовка(ПКМ для перезаряда)");
-    public static Weapon UZI = new Weapon(Material.DIAMOND_HOE, 26, 5, 8, 2, 35,5.5f, 1, "Пистолет-пулемет(ПКМ для перезаряда)");
+    public static Weapon Tactical = new Weapon(Material.WOOD_HOE, 7, 12, 6, 4, 45,1.5f, 3, Sound.ENTITY_ENDERDRAGON_FIREBALL_EXPLODE, "Дробовик(ПКМ для перезаряда)");
+    public static Weapon Pistol = new Weapon(Material.STONE_HOE, 21, 3, 8, 1, 25,6.75f, 1, Sound.ENTITY_FIREWORK_BLAST,"Пистолет(ПКМ для перезаряда)");
+    public static Weapon SCAR = new Weapon(Material.IRON_HOE, 41, 4, 6, 2, 35,5.5f, 1, Sound.ENTITY_FIREWORK_BLAST, "Автомат(ПКМ для перезаряда)");
+    public static Weapon Sniper = new Weapon(Material.GOLD_HOE, 2, 18, 15, 10, 60,5.5f, 1, Sound.ENTITY_FIREWORK_LARGE_BLAST, "Снайперская винтовка(ПКМ для перезаряда)");
+    public static Weapon UZI = new Weapon(Material.DIAMOND_HOE, 26, 5, 8, 2, 35,5.5f, 1, Sound.ENTITY_FIREWORK_LAUNCH, "Пистолет-пулемет(ПКМ для перезаряда)");
 
     public static Weapon getWeaponByMaterial(Material material){
         switch (material){

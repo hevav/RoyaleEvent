@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
 public class WeaponListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerInteractEvent event){
-        if(RoyaleHelper.isStarted()){
+        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
             if(event.getPlayer().getGameMode() == GameMode.SPECTATOR)
                 return;
             PlayerInventory inventory = event.getPlayer().getInventory();
@@ -61,7 +60,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         event.getPlayer().setWalkSpeed(0.2f / weapon.playerVelocity);
                     }
                     Location playerLocation = event.getPlayer().getLocation();
-                    playerLocation.getWorld().playSound(playerLocation, Sound.ENTITY_FIREWORK_LAUNCH, 1, 1);
+                    playerLocation.getWorld().playSound(playerLocation, weapon.sound, 1, 1);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         event.getPlayer().setWalkSpeed(0.2f);
                     });
@@ -86,13 +85,13 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerItemDamageEvent event) {
-        if(RoyaleHelper.isStarted() && (event.getItem() == null || event.getItem().getType() != Material.STONE_PICKAXE))
+        if(RoyaleHelper.isStarted() && (event.getItem() == null || event.getItem().getType() != Material.STONE_PICKAXE) && event.getPlayer().hasPermission("royaleevent.interact"))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerDeathEvent event) {
-        if(RoyaleHelper.isStarted()) {
+        if(RoyaleHelper.isStarted() && event.getEntity().hasPermission("royaleevent.interact")) {
             List<Player> survived = Bukkit.getServer().getOnlinePlayers().stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL && player.getHealth() > 0).collect(Collectors.toList());
             if (survived.size() == 1) {
                 RoyaleHelper.proceedWinner(survived.get(0));
@@ -101,7 +100,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
     }
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerRespawnEvent event) {
-        if(RoyaleHelper.isStarted()){
+        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
             event.getPlayer().setGameMode(GameMode.SPECTATOR);
         }
     }
@@ -110,6 +109,9 @@ public class WeaponListener implements org.bukkit.event.Listener {
     public static void onEvent(EntityDamageByEntityEvent event) {
         if(RoyaleHelper.isStarted() && event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.SNOWBALL){
             Player damaged = (Player) event.getEntity();
+            if(!damaged.hasPermission("royaleevent.interact")){
+                return;
+            }
             int damage = event.getDamager().getMetadata("damage").get(0).asInt()/10;
             String killer = event.getDamager().getMetadata("killer").get(0).asString();
             double health = damaged.getHealth();
@@ -135,13 +137,13 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryOpenEvent event) {
-        if(RoyaleHelper.isStarted() && event.getInventory().getType().equals(InventoryType.CHEST))
+        if(RoyaleHelper.isStarted() && event.getInventory().getType().equals(InventoryType.CHEST) && event.getPlayer().hasPermission("royaleevent.interact"))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(BlockBreakEvent event) {
-        if(RoyaleHelper.isStarted()){
+        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
             event.setCancelled(true);
             PlayerInventory inventory = event.getPlayer().getInventory();
             ItemStack item = inventory.getItemInMainHand();
@@ -189,7 +191,11 @@ public class WeaponListener implements org.bukkit.event.Listener {
     public static void onEvent(EntityPickupItemEvent event) {
         if(RoyaleHelper.isStarted() && event.getEntity() instanceof Player) {
             ItemStack pickupItem = event.getItem().getItemStack();
-            PlayerInventory inventory = ((Player) event.getEntity()).getInventory();
+            Player player = (Player) event.getEntity();
+            if(!player.hasPermission("royaleevent.interact")){
+                return;
+            }
+            PlayerInventory inventory = player.getInventory();
 
             Weapon weapon = Weapon.getWeaponByMaterial(pickupItem.getType());
             if(weapon == null) {
@@ -207,7 +213,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerItemConsumeEvent event){
-        if(RoyaleHelper.isStarted()){
+        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
             Drinkable drinkable = Drinkable.getDrinkableFromMaterial(event.getItem().getType());
             if(drinkable == null)
                 return;

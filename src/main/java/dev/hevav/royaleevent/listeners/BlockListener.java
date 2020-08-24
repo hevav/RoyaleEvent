@@ -4,7 +4,6 @@ import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.BlockHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.types.Chunkable;
-import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import dev.hevav.royaleevent.types.Placeable;
 import org.bukkit.Bukkit;
@@ -22,13 +21,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 public class BlockListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(BlockPlaceEvent event){
         if(RoyaleHelper.isStarted()){
+            Player player = event.getPlayer();
+            if(!player.hasPermission("royaleevent.interact"))
+                return;
             event.setCancelled(true);
-            PlayerInventory inventory = event.getPlayer().getInventory();
+            PlayerInventory inventory = player.getInventory();
             ItemStack item = inventory.getItemInMainHand();
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
@@ -55,7 +58,8 @@ public class BlockListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerInteractEvent event) {
-        if (RoyaleHelper.isStarted() && event.isBlockInHand()) {
+        Player player = event.getPlayer();
+        if (RoyaleHelper.isStarted() && player.hasPermission("royaleevent.interact") && event.isBlockInHand()) {
             ItemStack item = event.getItem();
             if (item == null)
                 return;
@@ -64,7 +68,7 @@ public class BlockListener implements org.bukkit.event.Listener {
                 return;
             if(event.getPlayer().getGameMode() == GameMode.SPECTATOR)
                 return;
-            Inventory inventory = event.getPlayer().getInventory();
+            Inventory inventory = player.getInventory();
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 OtherItems toPlace = OtherItems.switchItem(item.getType());
                 if(toPlace == null)
@@ -80,20 +84,29 @@ public class BlockListener implements org.bukkit.event.Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerToggleSneakEvent event) {
-        if(RoyaleHelper.isStarted() && event.isSneaking()){
-            Player player = event.getPlayer();
+        Player player = event.getPlayer();
+        if(RoyaleHelper.isStarted() && player.hasPermission("royaleevent.interact") && event.isSneaking()){
             Placeable placeable = Placeable.getPlaceableByPlacedMaterial(player.getLocation().add(0, -1, 0).getBlock().getType());
             if(placeable != null){
                 switch(placeable.name){
                     case "Костёр":
                         player.sendMessage(ChatColor.GREEN + "[RE] Хилюсь...");
                         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                            player.setHealth(player.getHealth()+4);
+                            player.setHealth(Math.min(player.getHealth()+4, 20));
                             player.sendMessage(ChatColor.GREEN + "[RE] Захилился :)");
                         }, 20);
                         break;
                     case "Батут":
-                        player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");//TODO:DO
+                        player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");
+                        Vector velocity = player.getLocation().getDirection();
+                        player.setVelocity(velocity.setX(0).setY(3).setZ(0));
+                        PlayerInventory playerInventory = player.getInventory();
+                        if(playerInventory.getChestplate().getType() == Material.ELYTRA)
+                            return;
+                        playerInventory.setChestplate(new ItemStack(Material.ELYTRA, 1));
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
+                            player.sendMessage(ChatColor.GREEN + "[RE] Удалил элитры :)");
+                        }, 1200);
                         break;
                 }
             }

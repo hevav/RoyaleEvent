@@ -1,7 +1,6 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
-import dev.hevav.royaleevent.types.Chunkable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
