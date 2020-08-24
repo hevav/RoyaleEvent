@@ -3,6 +3,7 @@ package dev.hevav.royaleevent.types;
 import org.bukkit.Material;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Placeable extends Inventorable {
@@ -18,12 +19,15 @@ public class Placeable extends Inventorable {
         this.tutorial = tutorial;
     }
 
-    public static final Placeable Campfire = new Placeable(Material.FURNACE, "Костер", Chunkable.Campfire, Arrays.asList(Material.THIN_GLASS, Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, Material.COAL_BLOCK, Material.WOOD, Material.WOOD_STAIRS, Material.WOOD_STEP, Material.STONE), "Встаньте на костер с Shift чтобы захилиться :)");
+    public static final Placeable Campfire = new Placeable(Material.FURNACE, "Костёр", Chunkable.Campfire, Arrays.asList(Material.THIN_GLASS, Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, Material.COAL_BLOCK, Material.WOOD, Material.WOOD_STAIRS, Material.WOOD_STEP, Material.STONE), "Встаньте на костер с Shift чтобы захилиться :)");
+    public static final Placeable Jumppad = new Placeable(Material.SLIME_BLOCK, "Батут", Chunkable.Jumppad, Collections.singletonList(Material.SLIME_BLOCK), "Нажмите на Shift для резкого прыжка :)");
 
     public static Placeable getPlaceableByMaterial(Material material){
         switch (material){
             case FURNACE:
                 return Campfire;
+            case SLIME_BLOCK:
+                return Jumppad;
             default:
                 return null;
         }

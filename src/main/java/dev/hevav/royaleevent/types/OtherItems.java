@@ -20,7 +20,7 @@ public class OtherItems extends Inventorable {
     public static OtherItems WoodStairs = new OtherItems(Material.WOOD_STAIRS, 6, "Поставить деревянную лестницу(ЛКМ для смены)", Chunkable.Stairs(Material.WOOD));
 
     public static OtherItems Bricks = new OtherItems(Material.BRICK, 7, "Поставить кирпичную стену(ЛКМ для смены)", Chunkable.Walls(Material.BRICK));
-    public static OtherItems BricksStairs = new OtherItems(Material.BRICK_STAIRS, 7, "Поставить кирпичную лестницу(ЛКМ для смены)", Chunkable.Stairs(Material.BRICK_STAIRS));
+    public static OtherItems BricksStairs = new OtherItems(Material.BRICK_STAIRS, 7, "Поставить кирпичную лестницу(ЛКМ для смены)", Chunkable.Stairs(Material.BRICK));
 
     public static OtherItems Iron = new OtherItems(Material.IRON_BLOCK, 8, "Поставить железную стену(ЛКМ для смены)", Chunkable.Walls(Material.IRON_BLOCK));
     public static OtherItems IronSlab = new OtherItems(Material.STONE_SLAB2, 8, "Поставить железный потолок(ЛКМ для смены)", Chunkable.Steps(Material.IRON_BLOCK));
@@ -30,6 +30,8 @@ public class OtherItems extends Inventorable {
         switch (material) {
             case WOOD:
             case CACTUS:
+            case SUGAR_CANE_BLOCK:
+            case DEAD_BUSH:
                 return OtherItems.Wood;
             case WOOD_STAIRS:
                 return OtherItems.WoodStairs;

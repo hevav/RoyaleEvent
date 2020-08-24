@@ -4,7 +4,9 @@ import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.InventoryHelper;
 import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.types.*;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -57,21 +59,28 @@ public class InventoryListener implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(EntityPickupItemEvent event){
         if(RoyaleHelper.isStarted() && event.getEntity() instanceof Player){
+            event.getItem().remove();
             event.setCancelled(true);
             ItemStack pickupItem = event.getItem().getItemStack();
-            PlayerInventory inventory = ((Player) event.getEntity()).getInventory();
-            event.getItem().remove();
+            Player player = (Player) event.getEntity();
+            PlayerInventory inventory = player.getInventory();
 
             if (pickupItem.getType() == Material.TRIPWIRE_HOOK){
-                ItemStack itemStack = inventory.getItemInOffHand();
-                itemStack.setAmount(itemStack.getAmount()+16);
-                inventory.setItemInOffHand(itemStack);
+                if(inventory.getItemInOffHand().getAmount() < 100) {
+                    ItemStack itemStack = inventory.getItemInOffHand();
+                    itemStack.setAmount(Math.min(itemStack.getAmount() + 16, 100));
+                    inventory.setItemInOffHand(itemStack);
+                }
+                else{
+                    Location location = player.getLocation();
+                    location.getWorld().dropItem(location, event.getItem().getItemStack());
+                }
                 event.setCancelled(true);
                 return;
             }
 
-            OtherItems item = OtherItems.getItemByMaterial(pickupItem.getType());
-            if(item == null) {
+            OtherItems otherItem = OtherItems.getItemByMaterial(pickupItem.getType());
+            if(otherItem == null) {
                 Inventorable item2 = Drinkable.getDrinkableFromMaterial(pickupItem.getType());
                 if(item2 == null)
                     item2 = Placeable.getPlaceableByMaterial(pickupItem.getType());
@@ -82,17 +91,23 @@ public class InventoryListener implements org.bukkit.event.Listener{
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setDisplayName(item2.name);
                 itemStack.setItemMeta(itemMeta);
-                InventoryHelper.addToFreeSlot(inventory, itemStack);
+                if(!InventoryHelper.addToFreeSlot(inventory, itemStack)){
+                    Location location = player.getLocation();
+                    location.getWorld().dropItem(location, event.getItem().getItemStack());
+                }
                 return;
             }
-            ItemStack curItem = inventory.getItem(item.inventoryNumber);
+            ItemStack curItem = inventory.getItem(otherItem.inventoryNumber);
             int setAmount = curItem.getAmount()+1;
             if(pickupItem.getType() == Material.WOOD_DOUBLE_STEP)
                 ++setAmount;
-            if(setAmount == 100)
+            if(setAmount == 100) {
+                Location location = player.getLocation();
+                location.getWorld().dropItem(location, event.getItem().getItemStack());
                 return;
+            }
             curItem.setAmount(setAmount);
-            inventory.setItem(item.inventoryNumber, curItem);
+            inventory.setItem(otherItem.inventoryNumber, curItem);
         }
     }
 }

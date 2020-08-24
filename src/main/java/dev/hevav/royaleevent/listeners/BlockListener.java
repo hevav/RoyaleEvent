@@ -33,7 +33,7 @@ public class BlockListener implements org.bukkit.event.Listener {
             OtherItems block = OtherItems.getItemByMaterial(item.getType());
             int amount = item.getAmount();
             float yaw = event.getPlayer().getLocation().getYaw();
-            Chunkable chunkable = Chunkable.fromLocation(BlockHelper.nextChunkByYaw(event.getBlock().getLocation(), yaw));
+            Chunkable chunkable = Chunkable.fromLocation(BlockHelper.nextChunkByYaw(event.getBlock().getLocation(), yaw), true);
             if(block == null){
                 Placeable placeable = Placeable.getPlaceableByMaterial(item.getType());
                 if(placeable == null)
@@ -84,13 +84,16 @@ public class BlockListener implements org.bukkit.event.Listener {
             Player player = event.getPlayer();
             Placeable placeable = Placeable.getPlaceableByPlacedMaterial(player.getLocation().add(0, -1, 0).getBlock().getType());
             if(placeable != null){
-                switch(placeable.material){
-                    case FURNACE:
+                switch(placeable.name){
+                    case "Костёр":
                         player.sendMessage(ChatColor.GREEN + "[RE] Хилюсь...");
                         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                            player.setHealth(player.getHealth()+1);
+                            player.setHealth(player.getHealth()+4);
                             player.sendMessage(ChatColor.GREEN + "[RE] Захилился :)");
                         }, 20);
+                        break;
+                    case "Батут":
+                        player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");//TODO:DO
                         break;
                 }
             }

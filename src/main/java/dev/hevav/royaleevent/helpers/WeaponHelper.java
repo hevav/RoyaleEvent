@@ -3,7 +3,6 @@ package dev.hevav.royaleevent.helpers;
 import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.types.*;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 

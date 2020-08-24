@@ -26,7 +26,7 @@ public class Chunkable {
         this.chunk = chunk;
     }
 
-    public static Chunkable fromLocation(Location location) {
+    public static Chunkable fromLocation(Location location, boolean findTopY) {
         List<List<List<Material>>> chunk = new ArrayList<>();
         Location chunkLocation = BlockHelper.getChunkableStart(location).add(-5, 0, 0);
         World world = chunkLocation.getWorld();
@@ -36,6 +36,10 @@ public class Chunkable {
                 List<Material> chunkX = new ArrayList<>();
                 for (int k = chunkLocation.getBlockZ()-1; k < chunkLocation.getBlockZ() + 5; k++) {
                     Material material = world.getBlockAt(j, i, k).getType();
+                    if(findTopY && material == Material.AIR) {
+                        location.setY(i+2);
+                        return fromLocation(location, false);
+                    }
                     chunkX.add(material);
                 }
                 chunkXY.add(chunkX);
@@ -172,6 +176,96 @@ public class Chunkable {
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.THIN_GLASS, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    )
+            )
+    );
+
+    public static Chunkable Jumppad = new Chunkable(
+            Arrays.asList(
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.STONE, Material.AIR, Material.STONE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK
+                            ),
+                            Arrays.asList(
+                                    Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK
+                            ),
+                            Arrays.asList(
+                                    Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.SLIME_BLOCK, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.CARPET, Material.CARPET, Material.CARPET, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET
+                            ),
+                            Arrays.asList(
+                                    Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET
+                            ),
+                            Arrays.asList(
+                                    Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET, Material.CARPET
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.CARPET, Material.CARPET, Material.CARPET, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR

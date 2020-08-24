@@ -15,8 +15,8 @@ public class Drinkable extends Inventorable {
     }
 
     public void drink(Player player){
-        player.setHealth(player.getHealth()+redoHealth);
-        player.setFoodLevel(player.getFoodLevel()+redoFoodLevel);
+        player.setHealth(Math.min(player.getHealth()+redoHealth, 20));
+        player.setFoodLevel(Math.min(player.getFoodLevel()+redoFoodLevel, 20));
     }
 
     public static Drinkable Slurp = new Drinkable(Material.GLASS_BOTTLE, "Восстановитель здоровья", 10, 1); //TODO: fix slurp

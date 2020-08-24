@@ -53,11 +53,15 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         return;
                     stack.setAmount(stack.getAmount()-1);
                     inventory.setItemInMainHand(stack);
-                    Snowball snowball = event.getPlayer().launchProjectile(Snowball.class);
-                    snowball.setVelocity(snowball.getVelocity().multiply(weapon.velocity/3));
-                    snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
-                    snowball.setMetadata("killer", new FixedMetadataValue(RoyaleEvent.getInstance(), event.getPlayer().getName()));
-                    event.getPlayer().setWalkSpeed(0.2f / weapon.playerVelocity);
+                    for(int i = 1; i <= weapon.shootQuantity; i++){
+                        Snowball snowball = event.getPlayer().launchProjectile(Snowball.class);
+                        snowball.setVelocity(snowball.getVelocity().multiply(weapon.velocity/3*i));
+                        snowball.setMetadata("damage", new FixedMetadataValue(RoyaleEvent.getInstance(), weapon.damage));
+                        snowball.setMetadata("killer", new FixedMetadataValue(RoyaleEvent.getInstance(), event.getPlayer().getName()));
+                        event.getPlayer().setWalkSpeed(0.2f / weapon.playerVelocity);
+                    }
+                    Location playerLocation = event.getPlayer().getLocation();
+                    playerLocation.getWorld().playSound(playerLocation, Sound.ENTITY_FIREWORK_LAUNCH, 1, 1);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         event.getPlayer().setWalkSpeed(0.2f);
                     });
@@ -112,7 +116,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
             Bukkit.getServer().getPlayer(killer).sendMessage(ChatColor.RED+"[RE] Попадение в " + damaged.getName());
             if(damaged.getHealth() <= damage){
                 Bukkit.getServer().getConsoleSender().sendMessage(String.format("%s killed %s", killer, damaged.getName()));
-                damaged.sendMessage(ChatColor.RED+"[RE] Вас убил " + killer);
+                Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s был убил %s", ChatColor.RED, damaged.getName(), killer));
 
                 RoyaleHelper.addKillToStats(killer);
                 event.setCancelled(true);
