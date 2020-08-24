@@ -84,9 +84,9 @@ public class BlockHelper {
                 for(int k = removeLocation.getBlockZ()-1; k < removeLocation.getBlockZ()+5; k++){
                     Block block = world.getBlockAt(i, j, k);
                     if(block.getType().equals(material)) {
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                            block.setType(Material.AIR);
-                        });
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->
+                            block.setType(Material.AIR)
+                        );
                         ++count;
                     }
                 }
@@ -99,7 +99,7 @@ public class BlockHelper {
         List<List<T>> ret = new ArrayList<>();
         final int N = table.get(0).size();
         for (int i = 0; i < N; i++) {
-            List<T> col = new ArrayList<T>();
+            List<T> col = new ArrayList<>();
             for (List<T> row : table) {
                 col.add(row.get(i));
             }
