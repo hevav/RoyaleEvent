@@ -99,18 +99,17 @@ public class RoyaleHelper {
     public static void proceedWinner(Player winner){
         winner.sendTitle(ChatColor.GOLD+"Вы победитель!!!", "RoyaleEvent by hevav", 5, 80, 5);
         Server server = Bukkit.getServer();
-        RoyaleHelper.stopRoyale(server);
         server.broadcastMessage(ChatColor.GOLD+"[RE] И у нас есть победитель! Это... " + winner.getName() + "!!!!");
         server.broadcastMessage(ChatColor.GOLD+"[RE] Подсчитываю топ по киллам....");
         HashMap<String, Integer> killerStats = RoyaleHelper.getKillerStats();
-        List<Integer> killsTop = new ArrayList<>(killerStats.values());
+        Set<Integer> killsSet = new LinkedHashSet<>(killerStats.values());
+        List<Integer> killsTop = new ArrayList<>(killsSet);
         Collections.sort(killsTop);
         Collections.reverse(killsTop);
-        Set<Integer> killsSet = new HashSet<>(killsTop);
         killsTop.clear();
         killsTop.addAll(killsSet);
 
-        for(int i = 0; i < Math.min(3, killsTop.size()); i++){
+        for(int i = 0; i < Math.min(10, killsTop.size()); i++){
             StringBuilder nicks = new StringBuilder();
             int needNum = killsTop.get(i);
             killerStats.forEach((String nick, Integer num)->{
@@ -121,5 +120,7 @@ public class RoyaleHelper {
 
             server.broadcastMessage(String.format("%s[RE] %d Место %sс %d убийствами", ChatColor.GOLD, i+1, nicks, needNum));
         }
+
+        RoyaleHelper.stopRoyale(server);
     }
 }

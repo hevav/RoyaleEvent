@@ -118,7 +118,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
             Bukkit.getServer().getPlayer(killer).sendMessage(ChatColor.RED+"[RE] Попадение в " + damaged.getName());
             if(damaged.getHealth() <= damage){
                 Bukkit.getServer().getConsoleSender().sendMessage(String.format("%s killed %s", killer, damaged.getName()));
-                Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s был убил %s", ChatColor.RED, damaged.getName(), killer));
+                Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s был убит %s", ChatColor.RED, damaged.getName(), killer));
 
                 RoyaleHelper.addKillToStats(killer);
                 event.setCancelled(true);

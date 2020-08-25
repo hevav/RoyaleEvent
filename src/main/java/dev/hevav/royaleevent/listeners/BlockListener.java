@@ -104,9 +104,11 @@ public class BlockListener implements org.bukkit.event.Listener {
                             return;
                         player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");
                         playerInventory.setChestplate(new ItemStack(Material.ELYTRA, 1));
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                            player.sendMessage(ChatColor.GREEN + "[RE] Удалил элитры :)");
-                        }, 1200);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()-> {
+                                    player.sendMessage(ChatColor.GREEN + "[RE] Удалил элитры :)");
+                                    playerInventory.setChestplate(new ItemStack(Material.AIR));
+                                }
+                        , 1200);
                         break;
                 }
             }

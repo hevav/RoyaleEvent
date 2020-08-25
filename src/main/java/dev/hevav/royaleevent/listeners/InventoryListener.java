@@ -103,9 +103,7 @@ public class InventoryListener implements org.bukkit.event.Listener{
                 return;
             }
             ItemStack curItem = inventory.getItem(otherItem.inventoryNumber);
-            int setAmount = curItem.getAmount()+1;
-            if(pickupItem.getType() == Material.WOOD_DOUBLE_STEP)
-                ++setAmount;
+            int setAmount = curItem.getAmount()+pickupItem.getAmount();
             if(setAmount == 100) {
                 Location location = player.getLocation();
                 location.getWorld().dropItem(location, event.getItem().getItemStack());
