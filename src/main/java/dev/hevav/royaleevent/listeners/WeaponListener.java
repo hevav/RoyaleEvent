@@ -76,7 +76,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         weapon = Weapon.getWeaponByMaterial(event.getItem().getType());
                         if(weapon == null)
                             return;
-                        WeaponHelper.doReload(inventory, weapon);
+                        WeaponHelper.doReload(inventory, weapon, event.getPlayer().getLocation());
                     }
                     break;
             }
@@ -92,10 +92,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerDeathEvent event) {
         if(RoyaleHelper.isStarted() && event.getEntity().hasPermission("royaleevent.interact")) {
-            List<Player> survived = Bukkit.getServer().getOnlinePlayers().stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL && player.getHealth() > 0).collect(Collectors.toList());
-            if (survived.size() == 1) {
-                RoyaleHelper.proceedWinner(survived.get(0));
-            }
+            RoyaleHelper.proceedKill(event.getEntity());
         }
     }
     @EventHandler(priority = EventPriority.NORMAL)
@@ -119,15 +116,13 @@ public class WeaponListener implements org.bukkit.event.Listener {
             if(damaged.getHealth() <= damage){
                 Bukkit.getServer().getConsoleSender().sendMessage(String.format("%s killed %s", killer, damaged.getName()));
                 Bukkit.getServer().broadcastMessage(String.format("%s[RE] %s был убит %s", ChatColor.RED, damaged.getName(), killer));
+                damaged.sendTitle(String.format("%sВас убил %s", ChatColor.RED, killer), "RoyaleEvent by hevav", 5, 80, 5);
 
                 RoyaleHelper.addKillToStats(killer);
                 event.setCancelled(true);
                 damaged.setGameMode(GameMode.SPECTATOR);
 
-                List<Player> survived = Bukkit.getServer().getOnlinePlayers().stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL).collect(Collectors.toList());
-                if(survived.size() == 1){
-                    RoyaleHelper.proceedWinner(survived.get(0));
-                }
+                RoyaleHelper.proceedKill(damaged);
             }
             else{
                 damaged.setHealth(health - damage);

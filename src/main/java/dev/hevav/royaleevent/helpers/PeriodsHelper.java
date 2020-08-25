@@ -2,6 +2,7 @@ package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -69,7 +70,9 @@ public class PeriodsHelper {
                 PlayerInventory inventory = player.getInventory();
                 inventory.setChestplate(new ItemStack(Material.AIR));
             }
-        }, 3000);
+            for(Block block : BlockHelper.getBlocks(middleLocation.getBlock(), 60, 10, 60))
+                block.setType(Material.AIR);
+        }, 1800);
     }
 
     public static void stopPeriod(){

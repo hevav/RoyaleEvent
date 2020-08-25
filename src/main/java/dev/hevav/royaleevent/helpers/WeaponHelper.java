@@ -3,6 +3,7 @@ package dev.hevav.royaleevent.helpers;
 import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.types.*;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -55,18 +56,20 @@ public class WeaponHelper {
         }
     }
 
-    public static void doReload(PlayerInventory inventory, Weapon weapon){
+    public static void doReload(PlayerInventory inventory, Weapon weapon, Location soundLocation){
         ItemStack reloadWeapon = inventory.getItemInMainHand();
         ItemStack patrons = inventory.getItemInOffHand();
         if(patrons.getAmount() < 2)
             return;
         int leftToFull = weapon.reloadSize - reloadWeapon.getAmount();
+        soundLocation.getWorld().playSound(soundLocation, Sound.BLOCK_STONE_BUTTON_CLICK_ON, 1, 1);
 
         RoyaleEvent plugin = RoyaleEvent.getInstance();
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, ()->{
             reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
             patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount() - 1));
             inventory.setItemInOffHand(patrons);
+            soundLocation.getWorld().playSound(soundLocation, Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
         }, weapon.reloadTicks);
     }
 }
