@@ -76,7 +76,7 @@ public class WeaponListener implements org.bukkit.event.Listener {
                         weapon = Weapon.getWeaponByMaterial(event.getItem().getType());
                         if(weapon == null)
                             return;
-                        WeaponHelper.doReload(inventory, weapon);
+                        WeaponHelper.doReload(inventory, weapon, event.getPlayer().getLocation());
                     }
                     break;
             }
