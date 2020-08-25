@@ -10,6 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RoyaleHelper {
 
@@ -94,6 +95,15 @@ public class RoyaleHelper {
             killerStats.remove(nick);
         }
         killerStats.put(nick, ++currentKills);
+    }
+
+    public static void proceedKill(Player killed){
+        Location playerLocation = killed.getLocation();
+        killed.getInventory().forEach(stack -> playerLocation.getWorld().dropItem(killed.getLocation(), stack));
+        List<Player> survived = Bukkit.getServer().getOnlinePlayers().stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL && player.getHealth() > 0).collect(Collectors.toList());
+        if (survived.size() == 1) {
+            RoyaleHelper.proceedWinner(survived.get(0));
+        }
     }
 
     public static void proceedWinner(Player winner){
