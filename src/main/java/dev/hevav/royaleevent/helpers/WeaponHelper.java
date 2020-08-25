@@ -69,7 +69,7 @@ public class WeaponHelper {
             reloadWeapon.setAmount(reloadWeapon.getAmount() + Math.min(leftToFull, patrons.getAmount() - 1));
             patrons.setAmount(patrons.getAmount() - Math.min(leftToFull, patrons.getAmount() - 1));
             inventory.setItemInOffHand(patrons);
-            soundLocation.getWorld().playSound(soundLocation, Sound.ITEM_FIRECHARGE_USE, 1, 1);
+            soundLocation.getWorld().playSound(soundLocation, Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
         }, weapon.reloadTicks);
     }
 }

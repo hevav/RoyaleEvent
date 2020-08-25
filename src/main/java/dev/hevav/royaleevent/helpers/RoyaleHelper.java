@@ -100,8 +100,8 @@ public class RoyaleHelper {
     public static void proceedKill(Player killed){
         Location playerLocation = killed.getLocation();
         World world = playerLocation.getWorld();
-        killed.getInventory().forEach(stack -> world.dropItem(killed.getLocation(), stack));
-        world.strikeLightning(playerLocation);
+        killed.getInventory().forEach(stack -> { if(stack != null) world.dropItem(killed.getLocation(), stack); });
+        world.strikeLightningEffect(playerLocation);
         List<Player> survived = Bukkit.getServer().getOnlinePlayers().stream().filter(player -> player.getGameMode() == GameMode.SURVIVAL && player.getHealth() > 0).collect(Collectors.toList());
         if (survived.size() == 1) {
             RoyaleHelper.proceedWinner(survived.get(0));
