@@ -88,29 +88,7 @@ public class BlockListener implements org.bukkit.event.Listener {
         if(RoyaleHelper.isStarted() && player.hasPermission("royaleevent.interact") && event.isSneaking()){
             Placeable placeable = Placeable.getPlaceableByPlacedMaterial(player.getLocation().add(0, -1, 0).getBlock().getType());
             if(placeable != null){
-                switch(placeable.name){
-                    case "Костёр":
-                        player.sendMessage(ChatColor.GREEN + "[RE] Хилюсь...");
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                            player.setHealth(Math.min(player.getHealth()+4, 20));
-                            player.sendMessage(ChatColor.GREEN + "[RE] Захилился :)");
-                        }, 20);
-                        break;
-                    case "Батут":
-                        Vector velocity = player.getLocation().getDirection();
-                        player.setVelocity(velocity.setX(0).setY(3).setZ(0));
-                        PlayerInventory playerInventory = player.getInventory();
-                        if(playerInventory.getChestplate() != null && playerInventory.getChestplate().getType() == Material.ELYTRA)
-                            return;
-                        player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");
-                        playerInventory.setChestplate(new ItemStack(Material.ELYTRA, 1));
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()-> {
-                                    player.sendMessage(ChatColor.GREEN + "[RE] Удалил элитры :)");
-                                    playerInventory.setChestplate(new ItemStack(Material.AIR));
-                                }
-                        , 1200);
-                        break;
-                }
+                placeable.onSneak.test(player);
             }
         }
     }
