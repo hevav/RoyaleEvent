@@ -1,8 +1,62 @@
 #Middle cords, set with /royalemiddle
-midXcord: 0
-midYcord: 0
-midZcord: 0
-groundY: 80
+middleLocation:
+  ==: org.bukkit.Location
+  world: world
+  x: 0
+  y: 0
+  z: 0
+  pitch: 0
+  yaw: 0
+#Game strings
+strings:
+  #helpers
+  gameStarted: Игра начата!
+  gameOver: Игра закончена!
+  playerIsWinner: Вы победитель!!!
+  winnerIs: И у нас есть победитель! Это...
+  sortStarted: Подсчитываю топ по киллам....
+  place: место
+  withKills: убийствами
+  middleLocationChange: Центр поставлен
+  #periods
+  bordersStartMoving: Зона сокращается, у вас есть %d секунд чтоб убежать!
+  bordersStopMoving: Зона сократилась :) Держим спокойствие целых %d секунд
+  airdropCountdown: Эйрдроп появится через %d секунд :)
+  airdrop: Появился эйрдроп на %d %d %d
+  airdropWarn: Эх а ведь скоро эйрдроп...
+  airdropGet: Кто-то нашел эйрдроп
+  #pvp
+  damaged: Попадение в
+  killedBy: был убит
+  playerKilledBy: Вас убил
+  #gadgets
+  healTool: Костёр
+  healDescription: Встаньте на костер с Shift чтобы захилиться :)
+  healStarted: Хилюсь...
+  healComplete: Захилился :)
+  jumpTool: Батут
+  jumpDescription: Нажмите на Shift для резкого прыжка :)
+  jumpStarted: Выдаю элитры на 1 минуту...
+  jumpComplete: Удалил элитры :)
+  #drinks
+  slurp: Восстановитель здоровья
+  regen: Восстановитель хавки
+  #other items
+  patron: Патроны
+  wood: Поставить деревянную стену(ЛКМ для смены)
+  woodStep: Поставить деревянный потолок(ЛКМ для смены)
+  woodStairs: Поставить деревянную лестницу(ЛКМ для смены)
+  bricks: Поставить кирпичную стену(ЛКМ для смены)
+  bricksStairs: Поставить кирпичную лестницу(ЛКМ для смены)
+  iron: Поставить железную стену(ЛКМ для смены)
+  ironStep: Поставить железный потолок(ЛКМ для смены)
+  ironFence: Поставить железный забор(ЛКМ для смены)
+  #weapons
+  tactical: Дробовик(ПКМ для перезаряда)
+  pistol: Пистолет(ПКМ для перезаряда)
+  scar: Автомат(ПКМ для перезаряда)
+  sniper: Снайперская винтовка(ПКМ для перезаряда)
+  uzi: Пистолет-пулемет(ПКМ для перезаряда)
 #Game periods (worldborder and loot)
 periods:
   worldborder:
