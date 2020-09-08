@@ -29,24 +29,24 @@ public class Placeable extends Inventorable {
         this.onSneak = onSneak;
     }
 
-    public static final Placeable Campfire = new Placeable(Material.FURNACE, "Костёр", Chunkable.Campfire, Arrays.asList(Material.THIN_GLASS, Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, Material.COAL_BLOCK, Material.WOOD, Material.WOOD_STAIRS, Material.WOOD_STEP, Material.STONE), "Встаньте на костер с Shift чтобы захилиться :)", player -> {
-        player.sendMessage(ChatColor.GREEN + "[RE] Хилюсь...");
+    public static final Placeable Campfire = new Placeable(Material.FURNACE, RoyaleEvent.config.getString("strings.healTool"), Chunkable.Campfire, Arrays.asList(Material.THIN_GLASS, Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, Material.COAL_BLOCK, Material.WOOD, Material.WOOD_STAIRS, Material.WOOD_STEP, Material.STONE), RoyaleEvent.config.getString("strings.healDescription"), player -> {
+        player.sendMessage(String.format("%s[RE] %s", ChatColor.GREEN, RoyaleEvent.config.getString("strings.healStarted")));
         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
             player.setHealth(Math.min(player.getHealth()+4, 20));
-            player.sendMessage(ChatColor.GREEN + "[RE] Захилился :)");
+            player.sendMessage(String.format("%s[RE] %s", ChatColor.GREEN, RoyaleEvent.config.getString("strings.healComplete")));
         }, 20);
         return true;
     });
-    public static final Placeable Jumppad = new Placeable(Material.SLIME_BLOCK, "Батут", Chunkable.Jumppad, Collections.singletonList(Material.SLIME_BLOCK), "Нажмите на Shift для резкого прыжка :)", player -> {
+    public static final Placeable Jumppad = new Placeable(Material.SLIME_BLOCK, RoyaleEvent.config.getString("strings.jumpTool"), Chunkable.Jumppad, Collections.singletonList(Material.SLIME_BLOCK), RoyaleEvent.config.getString("strings.jumpDescription"), player -> {
         Vector velocity = player.getLocation().getDirection();
         player.setVelocity(velocity.setX(0).setY(3).setZ(0));
         PlayerInventory playerInventory = player.getInventory();
         if(playerInventory.getChestplate() != null && playerInventory.getChestplate().getType() == Material.ELYTRA)
             return false;
-        player.sendMessage(ChatColor.GREEN + "[RE] Выдаю элитры на 1 минуту...");
+        player.sendMessage(String.format("%s[RE] %s", ChatColor.GREEN, RoyaleEvent.config.getString("strings.jumpStarted")));
         playerInventory.setChestplate(new ItemStack(Material.ELYTRA, 1));
         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()-> {
-                    player.sendMessage(ChatColor.GREEN + "[RE] Удалил элитры :)");
+                    player.sendMessage(ChatColor.GREEN + "[RE] "+RoyaleEvent.config.getString("strings.jumpStarted"));
                     playerInventory.setChestplate(new ItemStack(Material.AIR));
                 }, 1200);
         return true;

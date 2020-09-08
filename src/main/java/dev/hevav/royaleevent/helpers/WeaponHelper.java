@@ -14,7 +14,7 @@ public class WeaponHelper {
         Random random = new Random();
         for(int i = 0; i<threads; i++) {
             Inventorable inventorable;
-            switch(random.nextInt(15)){
+            switch(random.nextInt(16)){
                 case 0:
                     inventorable = Weapon.Tactical;
                     break;
@@ -41,12 +41,15 @@ public class WeaponHelper {
                     inventorable = OtherItems.Iron;
                     break;
                 case 11:
-                    inventorable = Drinkable.Regen;
+                    inventorable = Drinkable.Slurp;
                     break;
                 case 12:
-                    inventorable = Placeable.Campfire;
+                    inventorable = Drinkable.Regen;
                     break;
                 case 13:
+                    inventorable = Placeable.Campfire;
+                    break;
+                case 14:
                     inventorable = Placeable.Jumppad;
                     break;
                 default:

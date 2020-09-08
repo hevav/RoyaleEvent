@@ -1,28 +1,28 @@
 package dev.hevav.royaleevent.helpers;
 
 import dev.hevav.royaleevent.RoyaleEvent;
+import dev.hevav.royaleevent.listeners.BlockListener;
+import dev.hevav.royaleevent.listeners.InventoryListener;
+import dev.hevav.royaleevent.listeners.WeaponListener;
 import dev.hevav.royaleevent.types.Inventorable;
 import dev.hevav.royaleevent.types.OtherItems;
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RoyaleHelper {
-
-    private static boolean started = false;
-    private static HashMap<String, Integer> killerStats = new HashMap<>();
+    private static final HashMap<String, Integer> killerStats = new HashMap<>();
 
     public static void initRoyale(Server server, World initWorld){
-        server.broadcastMessage(ChatColor.GOLD + "[RE] Ивент запущен");
-        server.broadcastMessage(ChatColor.GOLD + "[RE] Плагин написал hevav");
-        server.broadcastMessage(ChatColor.GOLD + "[RE] Летите на элитрах с автобуса!");
-        server.broadcastMessage(ChatColor.GOLD + "[RE] Посмотрите наверх для экстренной посадки");
-        Location middleLocation = new Location(initWorld, (Integer) RoyaleEvent.config.get("midXcord"), (Integer) RoyaleEvent.config.get("midYcord"), (Integer) RoyaleEvent.config.get("midZcord"));
+        server.broadcastMessage(String.format("%s[RE] %s", ChatColor.GOLD, RoyaleEvent.config.getString("strings.gameStarted")));
+        Location middleLocation = (Location) RoyaleEvent.config.get("middleLocation");
         for(Player player : server.getOnlinePlayers()){
             PlayerInventory inventory = player.getInventory();
             inventory.clear();
@@ -67,21 +67,21 @@ public class RoyaleHelper {
 
             player.teleport(middleLocation);
 
-            player.sendTitle(ChatColor.GOLD+"Игра начата!", "RoyaleEvent by hevav", 5, 80, 5);
+            player.sendTitle(ChatColor.GOLD+RoyaleEvent.config.getString("strings.gameStarted"), "RoyaleEvent by hevav", 5, 80, 5);
         }
-        started = true;
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        RoyaleEvent plugin = RoyaleEvent.getInstance();
+        pluginManager.registerEvents(new BlockListener(), plugin);
+        pluginManager.registerEvents(new InventoryListener(), plugin);
+        pluginManager.registerEvents(new WeaponListener(), plugin);
         PeriodsHelper.doPeriod(server, initWorld, middleLocation);
     }
 
     public static void stopRoyale(Server server){
-        server.broadcastMessage(ChatColor.GOLD + "[RE] Ивент закончен");
+        server.broadcastMessage(String.format("%s[RE] %s", ChatColor.GOLD, RoyaleEvent.config.getString("strings.gameOver")));
         PeriodsHelper.stopPeriod();
         killerStats.clear();
-        started = false;
-    }
-
-    public static boolean isStarted(){
-        return started;
+        HandlerList.unregisterAll(RoyaleEvent.getInstance());
     }
 
     public static HashMap<String, Integer> getKillerStats(){
@@ -109,10 +109,10 @@ public class RoyaleHelper {
     }
 
     public static void proceedWinner(Player winner){
-        winner.sendTitle(ChatColor.GOLD+"Вы победитель!!!", "RoyaleEvent by hevav", 5, 80, 5);
+        winner.sendTitle(ChatColor.GOLD+RoyaleEvent.config.getString("strings.playerIsWinner"), "RoyaleEvent by hevav", 5, 80, 5);
         Server server = Bukkit.getServer();
-        server.broadcastMessage(ChatColor.GOLD+"[RE] И у нас есть победитель! Это... " + winner.getName() + "!!!!");
-        server.broadcastMessage(ChatColor.GOLD+"[RE] Подсчитываю топ по киллам....");
+        server.broadcastMessage(String.format("%s[RE] %s %s!!!", ChatColor.GOLD, RoyaleEvent.config.getString("strings.winnerIs"), winner.getName()));
+        server.broadcastMessage(String.format("%s[RE] %s", ChatColor.GOLD, RoyaleEvent.config.getString("strings.sortStarted")));
         HashMap<String, Integer> killerStats = RoyaleHelper.getKillerStats();
         Set<Integer> killsSet = new LinkedHashSet<>(killerStats.values());
         List<Integer> killsTop = new ArrayList<>(killsSet);
@@ -130,7 +130,7 @@ public class RoyaleHelper {
                 }
             });
 
-            server.broadcastMessage(String.format("%s[RE] %d Место %sс %d убийствами", ChatColor.GOLD, i+1, nicks, needNum));
+            server.broadcastMessage(String.format("%s[RE] %d %s %sс %d %s", ChatColor.GOLD, i+1, RoyaleEvent.config.getString("strings.place"), nicks, needNum, RoyaleEvent.config.getString("strings.withKills")));
         }
 
         RoyaleHelper.stopRoyale(server);

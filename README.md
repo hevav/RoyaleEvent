@@ -1,5 +1,7 @@
+<img src="https://github.com/hevav/RoyaleEvent/icon.png?raw=true" alt="RoyaleEvent">
+
 # RoyaleEvent
-Версия: 0.0.4<br>
+Версия: 0.0.5<br>
 Плагин для Spigot, позволяющий запустить свой ивент с Battle Royale(как в Fortnite/PUBG и т.д.).<br>
 Нативная версия Spigot: 1.12.2<br>
 Возможно поддерживается 1.13+<br>
@@ -47,9 +49,15 @@
 Винтовка | 1 | 18 | 15 | 10 | 60 | 5.5 | 1
 ПП | 25 | 5 | 8 | 2 | 35 | 3.5 | 1
 
+## TODO:
+-   Транспорт: Авто, самолет
+-   Оружия: RPG
+-   Прочее: MySQL, Переводы
+
 ## Thanks to:
 -   [Усику](https://vk.com/robot2284) и его команде строителей за то что пробовал скинуть плагин ФывФыву и за помощь с настройкой плагина
 -   [rebalez](https://www.youtube.com/channel/UC3bTvS1RXc8wgwDmBdHiywQ) за настройку оружий и XXX_Fortnite
 -   Fersept за [ресурспак](https://ws1.hevav.dev/cloud/fortnite.zip) и идею с Chunkable
 -   [Митингеру](https://github.com/meetinger) за помощь с реализацией Chunkable
+-   [q20w26a](https://vk.com/id581637690) за иконку
 -   SkyHidden за то что мешала на тестах плагина :)

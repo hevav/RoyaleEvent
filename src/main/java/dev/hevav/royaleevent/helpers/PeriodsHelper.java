@@ -29,13 +29,13 @@ public class PeriodsHelper {
                 case "radius":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         int radius = (Integer) border.get("radius");
-                        server.broadcastMessage(String.format("%s[RE] Зона сокращается, у вас есть %d секунд чтоб убежать!", ChatColor.GOLD, time));
+                        server.broadcastMessage(String.format("%s[RE] "+RoyaleEvent.config.getString("strings.bordersStartMoving"), ChatColor.GOLD, time));
                         worldBorder.setSize(radius, time);
                     }, tickForBorder);
                     break;
                 case "wait":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                        server.broadcastMessage(String.format("%s[RE] Зона сократилась :) Держим спокойствие целых %d секунд", ChatColor.GOLD, time));
+                        server.broadcastMessage(String.format("%s[RE] "+RoyaleEvent.config.getString("strings.bordersStopMoving"), ChatColor.GOLD, time));
                     }, tickForBorder);
                     break;
             }
@@ -49,17 +49,20 @@ public class PeriodsHelper {
             switch ((String) drop.get("type")){
                 case "airdrop":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                        server.broadcastMessage(String.format("%s[RE] Эйрдроп появится через %d секунд :)", ChatColor.GOLD, time));
+                        server.broadcastMessage(String.format("%s[RE] "+RoyaleEvent.config.getString("strings.airdropCountdown"), ChatColor.GOLD, time));
                     }, tickForDrop - (time*20));
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
                         Location location = BlockHelper.getRandomDropPoint(world);
-                        location.getBlock().setType(Material.DIAMOND_BLOCK);
-                        server.broadcastMessage(String.format("%s[RE] Появился эйрдроп на %d %d %d", ChatColor.GOLD, location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                        scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->
+                            location.getBlock().setType(Material.DIAMOND_BLOCK)
+                        , 60);
+                        location.add(0, 60, 0).getBlock().setType(Material.ANVIL);
+                        server.broadcastMessage(String.format("%s[RE] "+RoyaleEvent.config.getString("strings.airdrop"), ChatColor.GOLD, location.getBlockX(), location.getBlockY(), location.getBlockZ()));
                     }, tickForDrop);
                    break;
                 case "wait":
                     scheduler.scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->{
-                        server.broadcastMessage((ChatColor.GOLD) + "[RE] Эх а ведь скоро эйрдроп...");
+                        server.broadcastMessage(String.format("%s[RE] %s", ChatColor.GOLD, RoyaleEvent.config.getString("strings.airdropWarn")));
                     }, tickForDrop);
                     break;
             }

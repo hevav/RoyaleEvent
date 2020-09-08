@@ -1,5 +1,6 @@
 package dev.hevav.royaleevent.types;
 
+import dev.hevav.royaleevent.RoyaleEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -19,8 +20,8 @@ public class Drinkable extends Inventorable {
         player.setFoodLevel(Math.min(player.getFoodLevel()+redoFoodLevel, 20));
     }
 
-    public static Drinkable Slurp = new Drinkable(Material.GLASS_BOTTLE, "Восстановитель здоровья", 10, 1); //TODO: fix slurp
-    public static Drinkable Regen = new Drinkable(Material.MILK_BUCKET, "Восстановитель хавки", 1, 10);
+    public static Drinkable Slurp = new Drinkable(Material.GLASS_BOTTLE, RoyaleEvent.config.getString("strings.slurp"), 10, 1);
+    public static Drinkable Regen = new Drinkable(Material.MILK_BUCKET, RoyaleEvent.config.getString("strings.regen"), 1, 10);
 
     public static Drinkable getDrinkableFromMaterial(Material material){
         switch (material){

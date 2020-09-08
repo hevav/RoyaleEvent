@@ -20,13 +20,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class InventoryListener implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryClickEvent event){
-        if (RoyaleHelper.isStarted() && event.getWhoClicked().hasPermission("royaleevent.interact") && (event.getSlot() < 1 || event.getSlot() > 5))
+        if (event.getWhoClicked().hasPermission("royaleevent.interact") && (event.getSlot() < 1 || event.getSlot() > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerDropItemEvent event){
-        if (RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact")){
+        if (event.getPlayer().hasPermission("royaleevent.interact")){
             Material type = event.getItemDrop().getItemStack().getType();
             if (OtherItems.getItemByMaterial(type) != null || type == Material.STONE_PICKAXE)
                 event.setCancelled(true);
@@ -43,19 +43,19 @@ public class InventoryListener implements org.bukkit.event.Listener{
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(InventoryDragEvent event){
-        if (RoyaleHelper.isStarted() && event.getWhoClicked().hasPermission("royaleevent.interact") && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
+        if (event.getWhoClicked().hasPermission("royaleevent.interact") && event.getInventorySlots().stream().anyMatch(slot -> slot < 1 || slot > 5))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(PlayerSwapHandItemsEvent event){
-        if(RoyaleHelper.isStarted() && event.getPlayer().hasPermission("royaleevent.interact"))
+        if(event.getPlayer().hasPermission("royaleevent.interact"))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public static void onEvent(EntityPickupItemEvent event){
-        if(RoyaleHelper.isStarted() && event.getEntity() instanceof Player){
+        if(event.getEntity() instanceof Player){
             Player player = (Player) event.getEntity();
             if(!player.hasPermission("royaleevent.interact")){
                 return;
@@ -64,8 +64,7 @@ public class InventoryListener implements org.bukkit.event.Listener{
             event.setCancelled(true);
             ItemStack pickupItem = event.getItem().getItemStack();
             if(!player.hasPermission("royaleevent.interact")) {
-                Location location = player.getLocation();
-                location.getWorld().dropItem(location, event.getItem().getItemStack());
+                event.setCancelled(false);
                 return;
             }
             PlayerInventory inventory = player.getInventory();
@@ -77,10 +76,8 @@ public class InventoryListener implements org.bukkit.event.Listener{
                     inventory.setItemInOffHand(itemStack);
                 }
                 else{
-                    Location location = player.getLocation();
-                    location.getWorld().dropItem(location, event.getItem().getItemStack());
+                    event.setCancelled(false);
                 }
-                event.setCancelled(true);
                 return;
             }
 
@@ -97,16 +94,14 @@ public class InventoryListener implements org.bukkit.event.Listener{
                 itemMeta.setDisplayName(item2.name);
                 itemStack.setItemMeta(itemMeta);
                 if(!InventoryHelper.addToFreeSlot(inventory, itemStack)){
-                    Location location = player.getLocation();
-                    location.getWorld().dropItem(location, event.getItem().getItemStack());
+                    event.setCancelled(false);
                 }
                 return;
             }
             ItemStack curItem = inventory.getItem(otherItem.inventoryNumber);
             int setAmount = curItem.getAmount()+pickupItem.getAmount();
-            if(setAmount == 100) {
-                Location location = player.getLocation();
-                location.getWorld().dropItem(location, event.getItem().getItemStack());
+            if(setAmount >= 100) {
+                event.setCancelled(false);
                 return;
             }
             curItem.setAmount(setAmount);
