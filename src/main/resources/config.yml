@@ -1,5 +1,12 @@
 #Middle cords, set with /royalemiddle
 middleLocation:
+  ==: org.bukkit.Location
+  world: world
+  x: 0
+  y: 0
+  z: 0
+  pitch: 0
+  yaw: 0
 #Game strings
 strings:
   #helpers

@@ -62,14 +62,15 @@ public class BlockHelper {
         int zId = fromLocation.getBlockZ();
         switch (yawToFace(yaw)){
             case NORTH:
-                zId -= 4;
-                xId -= 4;
+                zId -= 9;
+                break;
             case EAST:
-                xId += 4;
-            case SOUTH:
-                xId += 4;
+                xId += 5;
+                zId -= 5;
+                break;
             case WEST:
-                xId -= 4;
+                xId -= 5;
+                zId -= 5;
                 break;
         }
         return new Location(fromLocation.getWorld(), xId, yId, zId);

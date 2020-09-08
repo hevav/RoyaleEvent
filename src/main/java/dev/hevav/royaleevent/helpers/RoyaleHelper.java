@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 public class RoyaleHelper {
     private static final HashMap<String, Integer> killerStats = new HashMap<>();
 
-    public static void initRoyale(Server server, World initWorld){
+    public static void initRoyale(Server server){
+        stopRoyale(server);
+
         server.broadcastMessage(String.format("%s[RE] %s", ChatColor.GOLD, RoyaleEvent.config.getString("strings.gameStarted")));
         Location middleLocation = (Location) RoyaleEvent.config.get("middleLocation");
         for(Player player : server.getOnlinePlayers()){
@@ -74,7 +76,7 @@ public class RoyaleHelper {
         pluginManager.registerEvents(new BlockListener(), plugin);
         pluginManager.registerEvents(new InventoryListener(), plugin);
         pluginManager.registerEvents(new WeaponListener(), plugin);
-        PeriodsHelper.doPeriod(server, initWorld, middleLocation);
+        PeriodsHelper.doPeriod(server, middleLocation);
     }
 
     public static void stopRoyale(Server server){
