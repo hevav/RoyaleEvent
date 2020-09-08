@@ -23,9 +23,9 @@ public class OtherItems extends Inventorable {
     public static OtherItems Bricks = new OtherItems(Material.BRICK, 7, RoyaleEvent.config.getString("strings.bricks"), Chunkable.Walls(Material.BRICK));
     public static OtherItems BricksStairs = new OtherItems(Material.BRICK_STAIRS, 7, RoyaleEvent.config.getString("strings.bricksStairs"), Chunkable.Stairs(Material.BRICK));
 
-    public static OtherItems Iron = new OtherItems(Material.IRON_BLOCK, 8, "Поставить железную стену(ЛКМ для смены)", Chunkable.Walls(Material.IRON_BLOCK));
-    public static OtherItems IronSlab = new OtherItems(Material.STONE_SLAB2, 8, "Поставить железный потолок(ЛКМ для смены)", Chunkable.Steps(Material.IRON_BLOCK));
-    public static OtherItems IronFence = new OtherItems(Material.IRON_FENCE, 8, "Поставить железный забор(ЛКМ для смены)", Chunkable.Walls(Material.IRON_FENCE));
+    public static OtherItems Iron = new OtherItems(Material.IRON_BLOCK, 8, RoyaleEvent.config.getString("strings.iron"), Chunkable.Walls(Material.IRON_BLOCK));
+    public static OtherItems IronSlab = new OtherItems(Material.STONE_SLAB2, 8, RoyaleEvent.config.getString("strings.ironStep"), Chunkable.Steps(Material.IRON_BLOCK));
+    public static OtherItems IronFence = new OtherItems(Material.IRON_FENCE, 8, RoyaleEvent.config.getString("strings.ironFence"), Chunkable.Walls(Material.IRON_FENCE));
 
     public static OtherItems getItemByMaterial(Material material){
         switch (material) {

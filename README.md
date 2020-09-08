@@ -1,4 +1,4 @@
-<img src="https://github.com/hevav/RoyaleEvent/dev/icon.png?raw=true" alt="RoyaleEvent">
+<img src="https://raw.githubusercontent.com/hevav/RoyaleEvent/dev/icon.jpg" alt="RoyaleEvent" align="right">
 
 # RoyaleEvent
 Версия: 0.0.5<br>
