@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/hevav/RoyaleEvent/dev/icon.jpg" alt="RoyaleEvent" align="right">
 
 # RoyaleEvent
-Версия: 0.0.5<br>
+Версия: 0.0.6<br>
 Плагин для Spigot, позволяющий запустить свой ивент с Battle Royale(как в Fortnite/PUBG и т.д.).<br>
 Нативная версия Spigot: 1.12.2<br>
 Возможно поддерживается 1.13+<br>

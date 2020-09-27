@@ -50,27 +50,28 @@ public class BlockHelper {
     }
 
     public static Location getChunkableStart(Location fromLocation){
-        int xId = (fromLocation.getBlockX()+1)/5;
-        int yId = (fromLocation.getBlockY()+1)/5;
-        int zId = (fromLocation.getBlockZ()+1)/5;
+        int xId = (fromLocation.getBlockX())/5;
+        int yId = (fromLocation.getBlockY())/5;
+        int zId = (fromLocation.getBlockZ())/5;
         return new Location(fromLocation.getWorld(), xId*5, yId*5, zId*5);
     }
 
     public static Location nextChunkByYaw(Location fromLocation, float yaw){
         int xId = fromLocation.getBlockX();
-        int yId = fromLocation.getBlockY()-1;
+        int yId = fromLocation.getBlockY()+5;
         int zId = fromLocation.getBlockZ();
         switch (yawToFace(yaw)){
             case NORTH:
-                zId -= 9;
+                zId -= 4;
                 break;
             case EAST:
-                xId += 5;
-                zId -= 5;
+                xId += 4;
                 break;
             case WEST:
-                xId -= 5;
-                zId -= 5;
+                xId -= 4;
+                break;
+            case SOUTH:
+                zId += 4;
                 break;
         }
         return new Location(fromLocation.getWorld(), xId, yId, zId);
@@ -79,10 +80,11 @@ public class BlockHelper {
     public static int deleteChunk(Location fromLocation, Material material){
         Location removeLocation = getChunkableStart(fromLocation);
         World world = removeLocation.getWorld();
+
         int count = 4;
-        for (int i = removeLocation.getBlockX()-5; i < removeLocation.getBlockX()+1; i++){
-            for (int j = removeLocation.getBlockY()-1; j < removeLocation.getBlockY()+5; j++){
-                for(int k = removeLocation.getBlockZ()-1; k < removeLocation.getBlockZ()+5; k++){
+        for (int i = removeLocation.getBlockX()-5; i < removeLocation.getBlockX(); i++){
+            for (int j = removeLocation.getBlockY(); j < removeLocation.getBlockY()+5; j++){
+                for(int k = removeLocation.getBlockZ(); k < removeLocation.getBlockZ()+5; k++){
                     Block block = world.getBlockAt(i, j, k);
                     if(block.getType().equals(material)) {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(RoyaleEvent.getInstance(), ()->

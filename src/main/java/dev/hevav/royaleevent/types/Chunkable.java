@@ -191,7 +191,7 @@ public class Chunkable {
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.THIN_GLASS, Material.AIR, Material.AIR
+                                    Material.AIR, Material.AIR, Material.YELLOW_GLAZED_TERRACOTTA, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
@@ -210,30 +210,13 @@ public class Chunkable {
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            )
-                    ),
-                    Arrays.asList(
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
-                            ),
-                            Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
@@ -244,13 +227,30 @@ public class Chunkable {
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
                             ),
                             Arrays.asList(
-                                    Material.AIR, Material.IRON_FENCE, Material.AIR, Material.IRON_FENCE, Material.AIR
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            )
+                    ),
+                    Arrays.asList(
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR
+                            ),
+                            Arrays.asList(
+                                    Material.AIR, Material.NETHER_FENCE, Material.AIR, Material.NETHER_FENCE, Material.AIR
                             ),
                             Arrays.asList(
                                     Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR

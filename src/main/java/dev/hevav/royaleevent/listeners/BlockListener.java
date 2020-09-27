@@ -1,15 +1,11 @@
 package dev.hevav.royaleevent.listeners;
 
-import dev.hevav.royaleevent.RoyaleEvent;
 import dev.hevav.royaleevent.helpers.BlockHelper;
-import dev.hevav.royaleevent.helpers.RoyaleHelper;
 import dev.hevav.royaleevent.types.Chunkable;
 import dev.hevav.royaleevent.types.OtherItems;
 import dev.hevav.royaleevent.types.Placeable;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +17,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.util.Vector;
 
 public class BlockListener implements org.bukkit.event.Listener {
     @EventHandler(priority = EventPriority.NORMAL)

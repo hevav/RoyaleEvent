@@ -37,7 +37,8 @@ public class Placeable extends Inventorable {
         }, 20);
         return true;
     });
-    public static final Placeable Jumppad = new Placeable(Material.SLIME_BLOCK, RoyaleEvent.config.getString("strings.jumpTool"), Chunkable.Jumppad, Collections.singletonList(Material.SLIME_BLOCK), RoyaleEvent.config.getString("strings.jumpDescription"), player -> {
+
+    public static final Placeable Jumppad = new Placeable(Material.SLIME_BLOCK, RoyaleEvent.config.getString("strings.jumpTool"), Chunkable.Jumppad, Arrays.asList(Material.NETHER_FENCE, Material.SLIME_BLOCK), RoyaleEvent.config.getString("strings.jumpDescription"), player -> {
         Vector velocity = player.getLocation().getDirection();
         player.setVelocity(velocity.setX(0).setY(3).setZ(0));
         PlayerInventory playerInventory = player.getInventory();
@@ -71,6 +72,7 @@ public class Placeable extends Inventorable {
                 return Campfire;
             case CARPET:
             case SLIME_BLOCK:
+            case NETHER_FENCE:
                 return Jumppad;
             default:
                 return null;
